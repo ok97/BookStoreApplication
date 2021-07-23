@@ -48,6 +48,8 @@ namespace BookStoreApplication
             services.AddTransient<IUserRL, UserRL>();
             services.AddTransient<IAdminBL, AdminBL>();
             services.AddTransient<IAdminRL, AdminRL>();
+            services.AddTransient<IBookBL, BookBL>();
+            services.AddTransient<IBookRL, BookRL>();
 
 
             // login
@@ -76,7 +78,7 @@ namespace BookStoreApplication
             services.AddSwaggerGen(c =>
             {
                 c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Fundoo API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Book Store API", Version = "v1" });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Name = "Authorization",

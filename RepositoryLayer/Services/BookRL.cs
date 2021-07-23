@@ -1,4 +1,8 @@
-﻿using RepositoryLayer.Interface;
+﻿using CommonLayer.RequestModel;
+using CommonLayer.ResponseModel;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,9 +11,149 @@ namespace RepositoryLayer.Services
 {
   public class BookRL:IBookRL
     {
-        //Declare private object for logger object
-        // private readonly ILoggerService _logger;
-        
-         
+        // Add connection code
+        private readonly IConfiguration _configuration;
+        private SqlConnection connection;
+        public BookRL(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+        public void SQLConnection()
+        {
+            string sqlConnectionString = _configuration.GetConnectionString("BookStoreDB");
+            connection = new SqlConnection(sqlConnectionString);
+        }
+
+        public AdminBookResponseData AddBook(int adminId, AddBooks adminbookData)
+        {
+            try
+            {
+                AdminBookResponseData adminbookResponseData = null;
+                SQLConnection();
+                using(SqlCommand cmd =new SqlCommand("sp_AddBooksProcedure", connection))
+                {
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@AdminId", adminId);
+                    cmd.Parameters.AddWithValue("@Name", adminbookData.Name);
+                    cmd.Parameters.AddWithValue("@Author", adminbookData.Author);
+                    cmd.Parameters.AddWithValue("@Language", adminbookData.Language);
+                    cmd.Parameters.AddWithValue("@Category", adminbookData.Category);
+                    cmd.Parameters.AddWithValue("@Pages", adminbookData.Pages);
+                    cmd.Parameters.AddWithValue("@Price", adminbookData.Price);
+
+                 
+                    connection.Open();
+                    SqlDataReader dataReader = cmd.ExecuteReader();
+                    adminbookResponseData = BookResponseModel(dataReader);
+                }
+                return adminbookResponseData;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        private AdminBookResponseData BookResponseModel(SqlDataReader dataReader)
+        {
+            try
+            {
+                AdminBookResponseData responseData = null;
+                while (dataReader.Read())
+                {
+                    responseData = new AdminBookResponseData
+                    {
+                        BookId = Convert.ToInt32(dataReader["BookID"]),
+                        Name = dataReader["Name"].ToString(),
+                        Author = dataReader["Author"].ToString(),
+                        Language = dataReader["Language"].ToString(),
+                        Category = dataReader["Category"].ToString(),                       
+                        Pages = dataReader["Pages"].ToString(),
+                    };
+                }
+                return responseData;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<AdminBookResponseData> GetListOfBooks()
+        {
+            try
+            {
+                List<AdminBookResponseData> bookList = null;
+                SQLConnection();
+                bookList = new List<AdminBookResponseData>();
+                using (SqlCommand cmd = new SqlCommand("sp_GetListOfBooks", connection))
+                {
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    connection.Open();
+                    SqlDataReader dataReader = cmd.ExecuteReader();
+                    bookList = ListBookResponseModel(dataReader);
+                };
+                return bookList;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        private List<AdminBookResponseData> ListBookResponseModel(SqlDataReader dataReader)
+        {
+            try
+            {
+                List<AdminBookResponseData> bookList = new List<AdminBookResponseData>();
+                AdminBookResponseData responseData = null;
+                while (dataReader.Read())
+                {
+                    responseData = new AdminBookResponseData
+                    {
+                        BookId = Convert.ToInt32(dataReader["BookId"]),
+                        Name = dataReader["Name"].ToString(),
+                        Author = dataReader["Author"].ToString(),
+                        Language = dataReader["Language"].ToString(),
+                        Category = dataReader["Category"].ToString(),                       
+                        Pages = dataReader["Pages"].ToString(),
+                        Price = dataReader["Price"].ToString()
+                    };
+                    bookList.Add(responseData);
+                }
+                return bookList;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public bool DeleteBookById(int adminId,string BookId)
+        {
+            try
+            {
+                SQLConnection();
+                using (SqlCommand cmd = new SqlCommand("sp_DeleteBookByIdProcedure", connection))
+                {
+
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@BookId", BookId);
+                    cmd.Parameters.AddWithValue("@AdminId", adminId);
+
+                    connection.Open();
+                    SqlDataReader dataReader = cmd.ExecuteReader();
+                    return true;
+                }
+               
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

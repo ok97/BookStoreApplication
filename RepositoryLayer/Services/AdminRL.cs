@@ -65,20 +65,18 @@ namespace RepositoryLayer.Services
         {
             try
             {
-                // UserResponce responseData = null;
-
                 SQLConnection();
                 string encryptedPassword = StringCipher.Encrypt(password);
 
-                SqlCommand cmd = new SqlCommand("AdminLogin", connection);
+                SqlCommand cmd = new SqlCommand("sp_AdminLogin", connection);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Email", email);
                 cmd.Parameters.AddWithValue("@Password", encryptedPassword);
 
-                SqlParameter userId = new SqlParameter("@AdminId", System.Data.SqlDbType.Int);
-                userId.Direction = System.Data.ParameterDirection.Output;
+                SqlParameter adminId = new SqlParameter("@AdminId", System.Data.SqlDbType.Int);
+                adminId.Direction = System.Data.ParameterDirection.Output;
 
-                cmd.Parameters.Add(userId);
+                cmd.Parameters.Add(adminId);
                 connection.Open();
                 cmd.ExecuteNonQuery();
                 string ID = (cmd.Parameters["@AdminId"].Value).ToString();

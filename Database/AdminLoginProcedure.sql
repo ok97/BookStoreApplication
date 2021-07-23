@@ -1,4 +1,4 @@
-create procedure AdminLogin 
+create procedure sp_AdminLogin 
 (@Email varchar(30),
 	@Password varchar(30),
 	@AdminId int out )
@@ -11,7 +11,7 @@ create procedure AdminLogin
 
 
 	declare @AdminId int
-	exec AdminLogin 'string','Xoh55Xv3+n3sBRxoeIDv+Q==',@AdminId out
+	exec sp_AdminLogin 'string','Xoh55Xv3+n3sBRxoeIDv+Q==',@AdminId out
 	print @AdminId
 
 
@@ -20,3 +20,6 @@ create procedure AdminLogin
 	select * from Admin
 
 	select * from Users WHERE Email='omkhawshi0@gmail.com';
+
+
+	
