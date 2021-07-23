@@ -1,63 +1,28 @@
-﻿using CommonLayer;
-using CommonLayer.RequestModel;
-using CommonLayer.ResponseModel;
+﻿using CommonLayer.RequestModel;
 using Experimental.System.Messaging;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using RepositoryLayer.Interface;
-
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
 
 namespace RepositoryLayer.Services
 {
-    public class UserRL : IUserRL
+    public class AdminRL : IAdminRL
     {
-        // DB
-        IList<Users> users = new List<Users>();
-        public bool SampleApi(Users newUser)
-        {
-            try
-            {
-                users.Add(newUser);
-                if (users.Contains(newUser) == true)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-        }
-
-        //Add User
-        //  private readonly UserContext _userDBContext;
-
         // Add connection code
         private readonly IConfiguration _configuration;
         private SqlConnection connection;
-        public UserRL(IConfiguration configuration)
+
+        public AdminRL(IConfiguration configuration)
         {
             _configuration = configuration;
         }
-
 
         public void SQLConnection()
         {
@@ -65,27 +30,27 @@ namespace RepositoryLayer.Services
             connection = new SqlConnection(sqlConnectionString);
         }
 
-        public void RegisterUser(RegisterUserRequest user)
+        public void RegisterAdmin(AdminRegisterRequest admin)
         {
             try
             {
-                UserResponce responseData = null;
+                //UserResponce responseData = null;
 
                 SQLConnection();
-                string encryptedPassword = StringCipher.Encrypt(user.Password);
+                string encryptedPassword = StringCipher.Encrypt(admin.Password);
 
-                using (SqlCommand cmd = new SqlCommand("dbo.UserRegisterProcedure", connection))
+                using (SqlCommand cmd = new SqlCommand("sp_AdminRegisterProcedure", connection))
                 {
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@FirstName", user.FirstName);
-                    cmd.Parameters.AddWithValue("@LastName", user.LastName);
-                    cmd.Parameters.AddWithValue("@Email", user.Email);
+                    cmd.Parameters.AddWithValue("@FirstName", admin.FirstName);
+                    cmd.Parameters.AddWithValue("@LastName", admin.LastName);
+                    cmd.Parameters.AddWithValue("@Email", admin.Email);
                     cmd.Parameters.AddWithValue("@Password", encryptedPassword);
-                    cmd.Parameters.AddWithValue("@Role", "Customer");
+                    cmd.Parameters.AddWithValue("@Role", "Admin");
 
                     connection.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
-                    responseData = RegistrationResponseModel(dataReader);
+                    //responseData = RegistrationResponseModel(dataReader);
                 };
                 // return true;
             }
@@ -95,62 +60,6 @@ namespace RepositoryLayer.Services
             }
         }
 
-        private UserResponce RegistrationResponseModel(SqlDataReader dataReader)
-        {
-            try
-            {
-                UserResponce responseData = null;
-                while (dataReader.Read())
-                {
-                    responseData = new UserResponce
-                    {
-                        //  UserId = Convert.ToInt32(dataReader["UserID"]),
-                        FirstName = dataReader["FirstName"].ToString(),
-                        LastName = dataReader["LastName"].ToString(),
-
-                        Email = dataReader["Email"].ToString(),
-                        Password = dataReader["Password"].ToString()
-
-                    };
-                }
-                return responseData;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-
-        //get data
-        //public List<Users> GetUsersData()
-        //{
-        //    try
-        //    {
-        //        var usersList = new List<Users>();
-        //        Users responseData = null;
-        //        var users = _userDBContext.Users;
-        //        foreach(Users user in users)
-        //        {
-        //            responseData = new Users()
-        //            {
-        //                UserId = user.UserId,
-        //                FirstName = user.FirstName,
-        //                LastName = user.LastName,
-        //                Email = user.Email,
-        //                Password = user.Password
-        //            };
-        //            usersList.Add(responseData);
-        //        }
-        //        return usersList;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception(ex.Message);
-        //    }
-        //}
-
-        // User Login
 
         public string Login(string email, string password)
         {
@@ -160,24 +69,24 @@ namespace RepositoryLayer.Services
 
                 SQLConnection();
                 string encryptedPassword = StringCipher.Encrypt(password);
-                
-                SqlCommand cmd = new SqlCommand("UserLogin", connection);
+
+                SqlCommand cmd = new SqlCommand("AdminLogin", connection);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Email", email);
                 cmd.Parameters.AddWithValue("@Password", encryptedPassword);
 
-                SqlParameter userId = new SqlParameter("@UserId",System.Data.SqlDbType.Int);
+                SqlParameter userId = new SqlParameter("@AdminId", System.Data.SqlDbType.Int);
                 userId.Direction = System.Data.ParameterDirection.Output;
 
                 cmd.Parameters.Add(userId);
                 connection.Open();
                 cmd.ExecuteNonQuery();
-                 string ID = (cmd.Parameters["@UserId"].Value).ToString();
+                string ID = (cmd.Parameters["@AdminId"].Value).ToString();
 
                 connection.Close();
                 connection.Dispose();
 
-               
+
 
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var tokenKey = Encoding.ASCII.GetBytes("Hello This Token Is Genereted");
@@ -186,7 +95,7 @@ namespace RepositoryLayer.Services
                     Subject = new ClaimsIdentity(new Claim[]
                {
                     new Claim("Email",email),
-                    new Claim("UserId",ID.ToString())
+                    new Claim("AdminId",ID.ToString())
                }),
                     Expires = DateTime.UtcNow.AddHours(7),
                     SigningCredentials =
@@ -206,16 +115,13 @@ namespace RepositoryLayer.Services
             }
         }
 
-
-
-
         // Forgot Password
         public bool ForgotPassword(string email)
         {
             try
             {
                 SQLConnection();
-                SqlDataAdapter sda = new SqlDataAdapter("SELECT * FROM Users WHERE Email='" + email + "'",connection);
+                SqlDataAdapter sda = new SqlDataAdapter("SELECT * FROM Admin WHERE Email='" + email + "'", connection);
                 DataTable dt = new DataTable();
 
                 sda.Fill(dt);
@@ -270,7 +176,6 @@ namespace RepositoryLayer.Services
 
 
         }
-
         // Generate Token
         public string GenerateToken(string email)
         {
@@ -296,6 +201,7 @@ namespace RepositoryLayer.Services
             return tokenHandler.WriteToken(token);
         }
 
+
         // Change Password
 
         public void ChangePassword(string email, string newPassword)
@@ -304,11 +210,11 @@ namespace RepositoryLayer.Services
             {
                 SQLConnection();
                 string encryptedPassword = StringCipher.Encrypt(newPassword);
-                SqlCommand cmd = new SqlCommand("UPDATE [dbo].[Users] SET[Password] ='" + encryptedPassword + "' WHERE Email ='" + email + "' ", connection);
+                SqlCommand cmd = new SqlCommand("UPDATE [dbo].[Admin] SET[Password] ='" + encryptedPassword + "' WHERE Email ='" + email + "' ", connection);
                 connection.Open();
                 cmd.ExecuteNonQuery();
                 connection.Close();
-                
+
             }
             catch (Exception ex)
             {
@@ -316,9 +222,5 @@ namespace RepositoryLayer.Services
             }
         }
 
-
-
     }
-
-
 }

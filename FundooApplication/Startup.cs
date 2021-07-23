@@ -46,7 +46,9 @@ namespace BookStoreApplication
 
             services.AddTransient<IUserBL, UserBL>();
             services.AddTransient<IUserRL, UserRL>();
-          
+            services.AddTransient<IAdminBL, AdminBL>();
+            services.AddTransient<IAdminRL, AdminRL>();
+
 
             // login
             services.AddAuthentication(x =>
