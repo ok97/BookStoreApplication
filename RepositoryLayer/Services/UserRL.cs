@@ -177,6 +177,7 @@ namespace RepositoryLayer.Services
                 connection.Close();
                 connection.Dispose();
 
+               
 
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var tokenKey = Encoding.ASCII.GetBytes("Hello This Token Is Genereted");
@@ -249,7 +250,7 @@ namespace RepositoryLayer.Services
                 msg.Formatter = new BinaryMessageFormatter();
                 EmailService.SendEmail(msg.Body.ToString(), GenerateToken(msg.Body.ToString()));
                 queue.ReceiveCompleted += new ReceiveCompletedEventHandler(msmqQueue_ReceiveCompleted);
-                queue.BeginReceive();
+                queue.BeginReceive(TimeSpan.FromSeconds(5));
                 queue.Close();
                 return true;
             }
@@ -265,7 +266,7 @@ namespace RepositoryLayer.Services
             MessageQueue queue = (MessageQueue)sender;
             Message msg = queue.EndReceive(e.AsyncResult);
             EmailService.SendEmail(e.Message.ToString(), GenerateToken(e.Message.ToString()));
-            queue.BeginReceive();
+            queue.BeginReceive(TimeSpan.FromSeconds(5));
 
 
         }
