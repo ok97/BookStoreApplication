@@ -131,6 +131,42 @@ namespace RepositoryLayer.Services
             }
         }
 
+
+
+        public AdminBookResponseData UpdateBook(int bookId, int adminId, AddBooks adminbookData)
+        {
+            try
+            {
+                AdminBookResponseData adminbookResponseData = null;
+                SQLConnection();
+                using (SqlCommand cmd = new SqlCommand("sp_UpdateBooksProcedure", connection))
+                {
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@BookId", bookId);
+                    cmd.Parameters.AddWithValue("@AdminId", adminId);
+                    cmd.Parameters.AddWithValue("@Name", adminbookData.Name);
+                    cmd.Parameters.AddWithValue("@Author", adminbookData.Author);
+                    cmd.Parameters.AddWithValue("@Language", adminbookData.Language);
+                    cmd.Parameters.AddWithValue("@Category", adminbookData.Category);
+                    cmd.Parameters.AddWithValue("@Pages", adminbookData.Pages);
+                    cmd.Parameters.AddWithValue("@Price", adminbookData.Price);
+
+
+                    connection.Open();
+                    SqlDataReader dataReader = cmd.ExecuteReader();
+                 
+                    adminbookResponseData = BookResponseModel(dataReader);
+                }
+                return adminbookResponseData;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+
         public bool DeleteBookById(int adminId,string BookId)
         {
             try

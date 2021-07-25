@@ -33,3 +33,10 @@
 2021-07-23 19:24:28.2434 INFO Login user
 2021-07-23 21:15:31.6051 INFO Login user
 2021-07-23 21:16:38.1400 INFO Book Added Successfully 4
+2021-07-23 21:30:09.8215 INFO Register Account Successfull
+2021-07-23 21:30:16.6238 INFO Login user
+2021-07-23 21:31:02.0312 INFO Forgot Password
+2021-07-23 21:34:36.4856 INFO Register Account Successfull
+2021-07-23 21:34:51.9138 INFO Login user
+2021-07-23 21:35:27.5466 INFO Forgot Password
+2021-07-23 21:37:51.7333 INFO Book Added Successfully 5

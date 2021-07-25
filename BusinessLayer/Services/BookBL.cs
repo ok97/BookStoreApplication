@@ -40,5 +40,13 @@ namespace BusinessLayer.Services
         {
             return this.bookRL.DeleteBookById(adminId,id);
         }
+
+
+        // Update Notes
+        public AdminBookResponseData UpdateBook(int bookId, int adminId, AddBooks adminbookData)
+        {
+            AdminBookResponseData adminbookResponseData = bookRL.UpdateBook(bookId, adminId, adminbookData);
+            return adminbookResponseData;
+        }
     }
 }

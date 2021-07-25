@@ -23,7 +23,7 @@ namespace BookStoreApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountController : ControllerBase
+    public class UserController : ControllerBase
     {
         //Declare private object for logger object
         private readonly ILoggerService _logger;
@@ -31,7 +31,7 @@ namespace BookStoreApplication.Controllers
 
         private IUserBL userBL;  //object IUser class
         
-        public AccountController(IUserBL userBL, ILoggerService logger)
+        public UserController(IUserBL userBL, ILoggerService logger)
         {
             this.userBL = userBL;
             _logger = logger; 

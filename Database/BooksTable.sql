@@ -14,6 +14,10 @@ GO
 
 
 	select * from Admin
+	select * from Books
+	select * from Users
+
+
 
 
 

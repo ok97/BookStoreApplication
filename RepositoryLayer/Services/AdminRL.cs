@@ -34,7 +34,7 @@ namespace RepositoryLayer.Services
         {
             try
             {
-                //UserResponce responseData = null;
+                
 
                 SQLConnection();
                 string encryptedPassword = StringCipher.Encrypt(admin.Password);
@@ -52,7 +52,7 @@ namespace RepositoryLayer.Services
                     SqlDataReader dataReader = cmd.ExecuteReader();
                     //responseData = RegistrationResponseModel(dataReader);
                 };
-                // return true;
+                
             }
             catch (Exception e)
             {
@@ -128,11 +128,7 @@ namespace RepositoryLayer.Services
                     return false;
                 }
 
-                //var result = _userDBContext.Users.FirstOrDefault(u => u.Email == email);
-                //if (result == null)
-                //{
-                //    return false;
-                //}
+               
                 MessageQueue queue;
 
                 // Message Queue 

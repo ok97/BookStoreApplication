@@ -57,6 +57,7 @@ namespace BookStoreApplication.Controllers
                 return BadRequest(new { ex.Message });
             }
         }
+
         [AllowAnonymous]
         [HttpGet]
         public IActionResult GetListOfBooks()
@@ -80,6 +81,40 @@ namespace BookStoreApplication.Controllers
                 return BadRequest(new { ex.Message });
             }
         }
+
+
+        // Update Note
+        [HttpPost("Update")]
+        public IActionResult UpdateBook(int bookId, AddBooks adminbookData)
+        {
+            try
+            {
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(AdminId => AdminId.Type.Equals("AdminId", StringComparison.InvariantCultureIgnoreCase));
+                int adminId = Convert.ToInt32(idClaim.Value);
+                AdminBookResponseData data = bookBL.UpdateBook( bookId, adminId, adminbookData);
+                bool success = false;
+                string message;
+                if (adminbookData == null)
+                {
+                    _logger.LogError("Book Update Failed"); // Logger Error
+                    message = $"Book Update Failed";
+                    return Ok(new { success, message });
+
+                }
+                else
+                {
+                    _logger.LogInfo($"Book Update Successfully {bookId}"); // Logger Info
+                    success = true;
+                    message = $"Book Update Successfully {bookId}";
+                    return Ok(new { success, message, data });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
 
         [HttpDelete]
         public IActionResult DeleteBookById(string id)
