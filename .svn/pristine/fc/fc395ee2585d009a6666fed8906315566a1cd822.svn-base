@@ -1,0 +1,75 @@
+﻿using BookStoreApplication.Contracts;
+using BusinessLayer.Interfaces;
+using CommonLayer.RequestModel;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace BookStoreApplication.Controllers
+{
+
+    public class CartController : ControllerBase
+    {
+        //Declare private object for logger object
+        private readonly ILoggerService _logger;
+        private ICartBL cartBL;
+        public CartController(ILoggerService logger, ICartBL cartBL)
+        {
+            this.cartBL = cartBL;
+            this._logger = logger;
+
+        }
+        [HttpPost("{BookId}")]
+        public IActionResult AddBookToCart(CartRequest cart)
+        {
+            try
+            {
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(UserId => UserId.Type.Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
+                int UserId = Convert.ToInt32(idClaim.Value);
+                var data = this.cartBL.AddBookToCart(UserId, cart.BookId);
+                if (data != true)
+                {
+                    return this.Ok(new { status = "True", message = "Book Added To Cart Successfully", data });
+                }
+                else
+                {
+                    return this.BadRequest(new { status = "False", message = "Failed To Add Cart" });
+                }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(new { message = exception.Message });
+            }
+        }
+
+        [HttpGet("GetCard")]
+        public IActionResult GetListOfBooksInCart()
+        {
+            try
+            {
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(UserId => UserId.Type.Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
+                int UserId = Convert.ToInt32(idClaim.Value);
+                var data = cartBL.GetListOfBooksInCart(UserId);
+                if (data != null)
+                {
+
+                    return Ok(new { success = true, message = "List of Books Fetched Successfully", data });
+                }
+                else
+                {
+
+                    return NotFound(new { success = true, message = "No Books Found" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
+
+
+    }
+}

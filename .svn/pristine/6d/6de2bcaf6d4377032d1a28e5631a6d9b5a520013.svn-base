@@ -1,0 +1,57 @@
+﻿using CommonLayer.ResponseModel;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+using RepositoryLayer.Interface;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace RepositoryLayer.Services
+{
+    public class CartRL : ICartRL
+    {
+        // Add connection code
+        private readonly IConfiguration _configuration;
+        private SqlConnection connection;
+        public CartRL(IConfiguration configuration)
+        {
+            _configuration = configuration;
+
+        }
+
+        public void SQLConnection()
+        {
+            string sqlConnectionString = _configuration.GetConnectionString("BookStoreDB");
+            connection = new SqlConnection(sqlConnectionString);
+        }
+        public bool AddBookToCart(int UserId, int BookId)
+        {
+            try
+            {
+               
+                SQLConnection();
+                using (SqlCommand cmd = new SqlCommand("sp_AddBookIntoCart", connection))
+                {
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@UserId", UserId);
+                    cmd.Parameters.AddWithValue("@BookId", BookId);
+                    cmd.Parameters.AddWithValue("@IsUsed", true);
+
+                    connection.Open();
+                    SqlDataReader dataReader = cmd.ExecuteReader();
+                   
+                };
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+       
+
+
+    }
+}
