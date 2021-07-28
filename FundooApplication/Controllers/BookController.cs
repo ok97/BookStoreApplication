@@ -37,6 +37,7 @@ namespace BookStoreApplication.Controllers
                 AdminBookResponseData data = bookBL.AddBook(adminId, adminbookData);
                 bool success = false;
                 string message;
+                
                 if (adminbookData == null)
                 {
                     _logger.LogError("Book Added Failed"); // Logger Error

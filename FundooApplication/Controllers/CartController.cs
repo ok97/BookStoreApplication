@@ -1,6 +1,7 @@
 ﻿using BookStoreApplication.Contracts;
 using BusinessLayer.Interfaces;
 using CommonLayer.RequestModel;
+using CommonLayer.ResponseModel;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -27,16 +28,21 @@ namespace BookStoreApplication.Controllers
             try
             {
                 var idClaim = HttpContext.User.Claims.FirstOrDefault(UserId => UserId.Type.Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
-                int UserId = Convert.ToInt32(idClaim.Value);
-                var data = this.cartBL.AddBookToCart(UserId, cart.BookId);
-                if (data != true)
+                      
+
+
+                if (idClaim != null)
                 {
+                    int UserId = Convert.ToInt32(idClaim.Value);
+                    var data = this.cartBL.AddBookToCart(UserId, cart.BookId);
                     return this.Ok(new { status = "True", message = "Book Added To Cart Successfully", data });
                 }
                 else
                 {
-                    return this.BadRequest(new { status = "False", message = "Failed To Add Cart" });
+
+                    return this.BadRequest(new { status = "False", message = "Failed To Add Cart", message1 = "Please Login User " });
                 }
+
             }
             catch (Exception exception)
             {
@@ -50,7 +56,7 @@ namespace BookStoreApplication.Controllers
             try
             {
                 var idClaim = HttpContext.User.Claims.FirstOrDefault(UserId => UserId.Type.Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
-               
+
                 if (idClaim != null)
                 {
                     int UserId = Convert.ToInt32(idClaim.Value);
@@ -76,15 +82,16 @@ namespace BookStoreApplication.Controllers
             try
             {
                 var idClaim = HttpContext.User.Claims.FirstOrDefault(UserId => UserId.Type.Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
-                int UserId = Convert.ToInt32(idClaim.Value);
-                var data = this.cartBL.AddBookQuantityintoCart(UserId, BookId, quantity);
-                if (data != true)
+               
+                if (idClaim != null)
                 {
+                    int UserId = Convert.ToInt32(idClaim.Value);
+                    var data = this.cartBL.AddBookQuantityintoCart(UserId, BookId, quantity);
                     return this.Ok(new { status = "True", message = "Quantity Add Cart Successfully", data });
                 }
                 else
                 {
-                    return this.BadRequest(new { status = "False", message = "Failed To Quantity Add Cart" });
+                    return this.BadRequest(new { status = "False", message = "Failed To Quantity Add Cart", message1 = "Please login user" });
                 }
             }
             catch (Exception exception)
@@ -99,15 +106,16 @@ namespace BookStoreApplication.Controllers
             try
             {
                 var idClaim = HttpContext.User.Claims.FirstOrDefault(UserId => UserId.Type.Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
-                int UserId = Convert.ToInt32(idClaim.Value);
-                bool result = cartBL.DeleteCartById(UserId, id);
-                if (!result.Equals(false))
+               
+                if (idClaim != null)
                 {
+                    int UserId = Convert.ToInt32(idClaim.Value);
+                    bool result = cartBL.DeleteCartById(UserId, id);
                     return this.Ok(new { success = true, message = " Card Delete Successfully" });
                 }
                 else
                 {
-                    return this.NotFound(new { success = false, message = "No such CartId Exist" });
+                    return this.NotFound(new { success = false, message = "No such CartId Exist", message1 = "Please login User" });
                 }
             }
             catch (Exception ex)

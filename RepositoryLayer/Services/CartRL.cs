@@ -14,6 +14,9 @@ namespace RepositoryLayer.Services
         // Add connection code
         private readonly IConfiguration _configuration;
         private SqlConnection connection;
+
+
+
         public CartRL(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -36,7 +39,7 @@ namespace RepositoryLayer.Services
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@UserId", UserId);
                     cmd.Parameters.AddWithValue("@BookId", BookId);
-                   // cmd.Parameters.AddWithValue("@OrderQuantity", '1');
+                    // cmd.Parameters.AddWithValue("@OrderQuantity", '1');
 
                     connection.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
@@ -96,34 +99,79 @@ namespace RepositoryLayer.Services
                         TotalPrice = Convert.ToInt32(dataReader["TotalPrice"]),
                     };
                     bookList.Add(responseData);
+                   
                 }
-                return bookList;
+                SQLConnection();
+                using (SqlCommand cmd = new SqlCommand("sp_UpdateTotalPrice", connection))
+                {
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@BookId", responseData.BookId);
+                    cmd.Parameters.AddWithValue("@TotalPrice", responseData.TotalPrice);
+
+                    connection.Open();
+                     cmd.ExecuteReader();
+                }
+
+                    return bookList;
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
+       
 
         public bool AddBookQuantityintoCart(int UserId, int BookId, int quantity)
         {
             try
             {
-
                 SQLConnection();
-                using (SqlCommand cmd = new SqlCommand("sp_AddBookQuantityintoCart", connection))
+                using (SqlCommand cmd = new SqlCommand("sp_SelectQuantity", connection))
                 {
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@UserId", UserId);
                     cmd.Parameters.AddWithValue("@BookId", BookId);
-                    cmd.Parameters.AddWithValue("@OrderQuantity", quantity);
                     
 
-                    connection.Open();
-                    SqlDataReader dataReader = cmd.ExecuteReader();
+                    SqlParameter BQuantity = new SqlParameter("@Quantity", System.Data.SqlDbType.Int);
+                    BQuantity.Direction = System.Data.ParameterDirection.Output;
+                    
 
-                };
-                return false;
+                    cmd.Parameters.Add(BQuantity);
+                   
+
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                    string bQuantity = (cmd.Parameters["@Quantity"].Value).ToString();
+                    int result = Int32.Parse(bQuantity);
+
+                    if ( quantity > result )
+                    {
+
+                        Console.WriteLine("Failed");
+                        return false;
+                    }
+                    else
+                    {
+                        SQLConnection();
+                        using (SqlCommand ccmd = new SqlCommand("sp_AddBookQuantityintoCart", connection))
+                        {
+                            ccmd.CommandType = System.Data.CommandType.StoredProcedure;
+                            ccmd.Parameters.AddWithValue("@UserId", UserId);
+                            ccmd.Parameters.AddWithValue("@BookId", BookId);
+                            ccmd.Parameters.AddWithValue("@OrderQuantity", quantity);
+
+
+                            connection.Open();
+                            SqlDataReader dataReader = ccmd.ExecuteReader();
+
+                        };
+                    }
+
+                }
+                
+
+               
+                return true;
             }
             catch (Exception ex)
             {
