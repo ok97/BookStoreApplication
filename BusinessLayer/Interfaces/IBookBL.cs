@@ -10,6 +10,7 @@ namespace BusinessLayer.Interfaces
     {
         AdminBookResponseData AddBook(int adminId, AddBooks adminbookData);
         public List<AdminBookResponseData> GetListOfBooks();
+        public List<AdminBookResponseData> GetListOfBooksid(int bookId);
 
         public bool DeleteBookById(int adminId,string id);
 

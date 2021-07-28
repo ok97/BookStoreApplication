@@ -36,7 +36,7 @@ namespace RepositoryLayer.Services
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@UserId", UserId);
                     cmd.Parameters.AddWithValue("@BookId", BookId);
-                    cmd.Parameters.AddWithValue("@IsUsed", true);
+                   // cmd.Parameters.AddWithValue("@OrderQuantity", '1');
 
                     connection.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
@@ -91,11 +91,39 @@ namespace RepositoryLayer.Services
                         Language = dataReader["Language"].ToString(),
                         Category = dataReader["Category"].ToString(),
                         Pages = dataReader["Pages"].ToString(),
-                        Price = dataReader["Price"].ToString()
+                        Price = dataReader["Price"].ToString(),
+                        OrderQuantity = Convert.ToInt32(dataReader["OrderQuantity"]),
+                        TotalPrice = Convert.ToInt32(dataReader["TotalPrice"]),
                     };
                     bookList.Add(responseData);
                 }
                 return bookList;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public bool AddBookQuantityintoCart(int UserId, int BookId, int quantity)
+        {
+            try
+            {
+
+                SQLConnection();
+                using (SqlCommand cmd = new SqlCommand("sp_AddBookQuantityintoCart", connection))
+                {
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@UserId", UserId);
+                    cmd.Parameters.AddWithValue("@BookId", BookId);
+                    cmd.Parameters.AddWithValue("@OrderQuantity", quantity);
+                    
+
+                    connection.Open();
+                    SqlDataReader dataReader = cmd.ExecuteReader();
+
+                };
+                return false;
             }
             catch (Exception ex)
             {
@@ -116,7 +144,19 @@ namespace RepositoryLayer.Services
 
                     connection.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
+                    //int CardExist = (int)cmd.ExecuteScalar();
+                    //if (CardExist > 0)
+                    //{
+                    //    return true;
+                    //}
+                    //else
+                    //{
+                    //    return false;
+                    //}
                     return true;
+
+                    
+
                 }
 
             }

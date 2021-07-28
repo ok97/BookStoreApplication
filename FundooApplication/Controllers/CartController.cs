@@ -21,7 +21,7 @@ namespace BookStoreApplication.Controllers
             this._logger = logger;
 
         }
-        [HttpPost("{BookId}")]
+        [HttpPost("Add")]
         public IActionResult AddBookToCart(CartRequest cart)
         {
             try
@@ -50,22 +50,46 @@ namespace BookStoreApplication.Controllers
             try
             {
                 var idClaim = HttpContext.User.Claims.FirstOrDefault(UserId => UserId.Type.Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
-                int UserId = Convert.ToInt32(idClaim.Value);
-                var data = cartBL.GetListOfBooksInCart(UserId);
-                if (data != null)
+               
+                if (idClaim != null)
                 {
-
+                    int UserId = Convert.ToInt32(idClaim.Value);
+                    var data = cartBL.GetListOfBooksInCart(UserId);
                     return Ok(new { success = true, message = "List of Books Fetched Successfully", data });
                 }
                 else
                 {
 
-                    return NotFound(new { success = true, message = "No Books Found" });
+                    return NotFound(new { success = true, message = "Please Login User And Then Access" });
                 }
             }
             catch (Exception ex)
             {
                 return BadRequest(new { ex.Message });
+            }
+        }
+
+
+        [HttpPut("Update")]
+        public IActionResult AddBookQuantityintoCart(int BookId, int quantity)
+        {
+            try
+            {
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(UserId => UserId.Type.Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
+                int UserId = Convert.ToInt32(idClaim.Value);
+                var data = this.cartBL.AddBookQuantityintoCart(UserId, BookId, quantity);
+                if (data != true)
+                {
+                    return this.Ok(new { status = "True", message = "Quantity Add Cart Successfully", data });
+                }
+                else
+                {
+                    return this.BadRequest(new { status = "False", message = "Failed To Quantity Add Cart" });
+                }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(new { message = exception.Message });
             }
         }
 

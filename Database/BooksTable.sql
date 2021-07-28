@@ -10,6 +10,7 @@ GO
 	[Category] varchar(30) ,
 	[Pages] varchar(30) ,
 	[Price] varchar (30),
+	[Quantity] int 
 	PRIMARY KEY(BookId));
 
 
@@ -17,8 +18,10 @@ GO
 	select * from Books
 	select * from Users
 
+delete from Books
 
 
 
 
-	
+
+	drop table Books

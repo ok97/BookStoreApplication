@@ -166,18 +166,22 @@ namespace RepositoryLayer.Services
                 cmd.Parameters.AddWithValue("@Email", email);
                 cmd.Parameters.AddWithValue("@Password", encryptedPassword);
 
-                SqlParameter userId = new SqlParameter("@UserId",System.Data.SqlDbType.Int);
+                SqlParameter userId = new SqlParameter("@UserId",System.Data.SqlDbType.Int);               
                 userId.Direction = System.Data.ParameterDirection.Output;
+                SqlParameter emailout = new SqlParameter("@EmailOut", System.Data.SqlDbType.VarChar, 30);
+                emailout.Direction = System.Data.ParameterDirection.Output;
 
                 cmd.Parameters.Add(userId);
+                cmd.Parameters.Add(emailout);
+
                 connection.Open();
                 cmd.ExecuteNonQuery();
                  string ID = (cmd.Parameters["@UserId"].Value).ToString();
+                 string Emailout = (cmd.Parameters["@EmailOut"].Value).ToString();
 
                 connection.Close();
                 connection.Dispose();
-
-               
+                
 
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var tokenKey = Encoding.ASCII.GetBytes("Hello This Token Is Genereted");
@@ -185,8 +189,8 @@ namespace RepositoryLayer.Services
                 {
                     Subject = new ClaimsIdentity(new Claim[]
                {
-                    new Claim("Email",email),
-                    new Claim("UserId",ID.ToString())
+                    new Claim("Email",Emailout),
+                    new Claim("UserId",ID)
                }),
                     Expires = DateTime.UtcNow.AddHours(7),
                     SigningCredentials =

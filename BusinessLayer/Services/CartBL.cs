@@ -34,6 +34,10 @@ namespace BusinessLayer.Services
             }
         }
 
+        public bool AddBookQuantityintoCart(int UserId, int BookId, int quantity)
+        {
+            return this.cartRL.AddBookQuantityintoCart(UserId, BookId, quantity);
+        }
 
         public bool DeleteCartById(int UserId, string id)
         {

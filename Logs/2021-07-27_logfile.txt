@@ -1,0 +1,20 @@
+2021-07-27 08:04:54.6764 INFO Login user
+2021-07-27 08:04:54.9409 INFO Get Notes Successfully Thise UserId:- 23
+2021-07-27 08:05:02.7506 INFO Get Notes Successfully Thise UserId:- 23
+2021-07-27 08:10:07.1373 INFO Notes Created Successfully 23
+2021-07-27 08:10:07.1500 INFO Get Notes Successfully Thise UserId:- 23
+2021-07-27 08:10:10.6898 INFO Get Notes Successfully Thise UserId:- 23
+2021-07-27 08:10:15.6276 INFO Update Notes Successfully CommonLayer.ResponseModel.UserNoteResponseData
+2021-07-27 08:10:15.6369 INFO Get Notes Successfully Thise UserId:- 23
+2021-07-27 08:10:18.8689 INFO Delete Notes Successfully thise NotesId:- 74
+2021-07-27 08:10:18.9353 INFO Delete Notes Successfully thise NotesId:- 74
+2021-07-27 08:10:21.9129 INFO Get Notes Successfully Thise UserId:- 23
+2021-07-27 20:23:13.5995 INFO Register Account Successfull
+2021-07-27 20:23:38.2161 INFO Login user
+2021-07-27 20:25:36.7496 INFO Book Added Successfully 8
+2021-07-27 20:38:10.3336 INFO Register Account Successfull
+2021-07-27 20:39:26.2826 INFO Login user
+2021-07-27 20:56:55.1476 INFO Login user
+2021-07-27 21:52:42.1327 INFO Login user
+2021-07-27 22:18:04.2598 INFO Login user
+2021-07-27 23:08:32.7395 INFO Login user

@@ -41,6 +41,7 @@ namespace RepositoryLayer.Services
                     cmd.Parameters.AddWithValue("@Category", adminbookData.Category);
                     cmd.Parameters.AddWithValue("@Pages", adminbookData.Pages);
                     cmd.Parameters.AddWithValue("@Price", adminbookData.Price);
+                    cmd.Parameters.AddWithValue("@Quantity", adminbookData.Quantity);
 
                  
                     connection.Open();
@@ -70,6 +71,8 @@ namespace RepositoryLayer.Services
                         Language = dataReader["Language"].ToString(),
                         Category = dataReader["Category"].ToString(),                       
                         Pages = dataReader["Pages"].ToString(),
+                        Price = dataReader["Price"].ToString(),
+                        Quantity = Convert.ToInt32(dataReader["Quantity"])
                     };
                 }
                 return responseData;
@@ -103,6 +106,30 @@ namespace RepositoryLayer.Services
             }
         }
 
+        public List<AdminBookResponseData> GetListOfBooksid(int bookId)
+        {
+            try
+            {
+                List<AdminBookResponseData> bookList = null;
+                SQLConnection();
+                bookList = new List<AdminBookResponseData>();
+                using (SqlCommand cmd = new SqlCommand("sp_GetListOfBooksId", connection))
+                {
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@BookId", bookId);
+
+                    connection.Open();
+                    SqlDataReader dataReader = cmd.ExecuteReader();
+                    bookList = ListBookResponseModel(dataReader);
+                };
+                return bookList;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         private List<AdminBookResponseData> ListBookResponseModel(SqlDataReader dataReader)
         {
             try
@@ -119,7 +146,8 @@ namespace RepositoryLayer.Services
                         Language = dataReader["Language"].ToString(),
                         Category = dataReader["Category"].ToString(),                       
                         Pages = dataReader["Pages"].ToString(),
-                        Price = dataReader["Price"].ToString()
+                        Price = dataReader["Price"].ToString(),
+                        Quantity = Convert.ToInt32(dataReader["Quantity"])
                     };
                     bookList.Add(responseData);
                 }

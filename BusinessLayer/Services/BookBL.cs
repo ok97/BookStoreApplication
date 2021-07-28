@@ -35,6 +35,17 @@ namespace BusinessLayer.Services
             }
         }
 
+        public List<AdminBookResponseData> GetListOfBooksid(int bookId)
+        {
+            try
+            {
+                return this.bookRL.GetListOfBooksid(bookId);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
 
         public bool DeleteBookById(int adminId,string id)
         {

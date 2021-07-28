@@ -12,6 +12,7 @@ namespace BusinessLayer.Interfaces
 
         public List<CartBookResponse> GetListOfBooksInCart(int UserId);
 
+        public bool AddBookQuantityintoCart(int UserId, int BookId, int quantity);
         public bool DeleteCartById(int UserId, string id);
     }
 }

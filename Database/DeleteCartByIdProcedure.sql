@@ -11,4 +11,6 @@ begin
 	select * from Carts
 
 
-	
+	1. Quantity add
+
+	2. check Book id exixt

@@ -1,11 +1,13 @@
 create procedure sp_AddBookIntoCart
 	@UserId int,
-	@BookId int,
-	@IsUsed varchar(20)
+	@BookId int
+	
 	
 	as 
 	begin
-	Insert into [dbo].[Carts] values ( @UserId,@BookId ,@IsUsed)
+	Insert into Carts (UserId ,BookId) values (@UserId,@BookId)
 	End
 
 	drop proc sp_AddBookIntoCart
+
+	select * from Carts

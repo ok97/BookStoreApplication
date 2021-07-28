@@ -81,10 +81,32 @@ namespace BookStoreApplication.Controllers
                 return BadRequest(new { ex.Message });
             }
         }
+        [AllowAnonymous]
+        [HttpGet("{bookId}")]
+        public IActionResult GetListOfBooksid(int bookId)
+        {
+            try
+            {
+                var data = bookBL.GetListOfBooksid(bookId);
+                if (data != null)
+                {
 
+                    return Ok(new { success = true, message = "List of Books Fetched Successfully", data });
+                }
+                else
+                {
+
+                    return NotFound(new { success = true, message = "No Books Found" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
 
         // Update Note
-        [HttpPost("{bookId}")]
+        [HttpPut("{bookId}")]
         public IActionResult UpdateBook(int bookId, AddBooks adminbookData)
         {
             try
