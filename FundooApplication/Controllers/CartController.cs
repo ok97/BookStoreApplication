@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 namespace BookStoreApplication.Controllers
 {
 
+    [Route("api/[controller]")]
+    [ApiController]
     public class CartController : ControllerBase
     {
         //Declare private object for logger object
@@ -61,7 +63,7 @@ namespace BookStoreApplication.Controllers
                 {
                     int UserId = Convert.ToInt32(idClaim.Value);
                     var data = cartBL.GetListOfBooksInCart(UserId);
-                    return Ok(new { success = true, message = "List of Books Fetched Successfully", data });
+                    return Ok(new { success = true, message = "List of Carts Fetched Successfully", data });
                 }
                 else
                 {
