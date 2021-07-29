@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.Interfaces;
+using CommonLayer.ResponseModel;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,23 @@ namespace BusinessLayer.Services
             {
                 throw new Exception(e.Message);
             }
+        }
+
+        public List<OrderResponse> GetOrders(int UserId ,int CartId)
+        {
+            try
+            {
+                return this.orderRL.GetOrders(UserId, CartId);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public bool DeleteOrderById(int UserId, int OrderId)
+        {
+            return this.orderRL.DeleteOrderById(UserId, OrderId);
         }
     }
 }

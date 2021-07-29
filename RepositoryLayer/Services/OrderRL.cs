@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using CommonLayer.ResponseModel;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using RepositoryLayer.Interface;
 using System;
@@ -51,17 +52,18 @@ namespace RepositoryLayer.Services
                 throw new Exception(ex.Message);
             }
         }
-
         public List<OrderResponse> GetListOfOrders(int UserId)
         {
+           
             try
             {
-                List<AdminBookResponseData> bookList = null;
+                List<OrderResponse> bookList = null;
                 SQLConnection();
-                bookList = new List<AdminBookResponseData>();
-                using (SqlCommand cmd = new SqlCommand("sp_GetListOfBooks", connection))
+                bookList = new List<OrderResponse>();
+                using (SqlCommand cmd = new SqlCommand("sp_GetListOrder", connection))
                 {
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@UserId", UserId);                 
 
                     connection.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
@@ -74,24 +76,57 @@ namespace RepositoryLayer.Services
                 throw new Exception(ex.Message);
             }
         }
-        private List<AdminBookResponseData> ListBookResponseModel(SqlDataReader dataReader)
+        public List<OrderResponse> GetOrders(int UserId, int CartId)
+        {
+            //GetListOfOrders
+            try
+            {
+                List<OrderResponse> bookList = null;
+                SQLConnection();
+                bookList = new List<OrderResponse>();
+                using (SqlCommand cmd = new SqlCommand("sp_GetOrder", connection))
+                {
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@UserId", UserId);
+                    cmd.Parameters.AddWithValue("@CartId", CartId);
+
+                    connection.Open();
+                    SqlDataReader dataReader = cmd.ExecuteReader();
+                    bookList = ListBookResponseModel(dataReader);
+                };
+                return bookList;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        private List<OrderResponse> ListBookResponseModel(SqlDataReader dataReader)
         {
             try
             {
-                List<AdminBookResponseData> bookList = new List<AdminBookResponseData>();
-                AdminBookResponseData responseData = null;
+                List<OrderResponse> bookList = new List<OrderResponse>();
+                OrderResponse responseData = null;
                 while (dataReader.Read())
                 {
-                    responseData = new AdminBookResponseData
+                    responseData = new OrderResponse
                     {
+                        UserId = Convert.ToInt32(dataReader["UserId"]),
+                        CartId = Convert.ToInt32(dataReader["CartId"]),
+                        AddressId = Convert.ToInt32(dataReader["AddressId"]),
+                        OrderId = Convert.ToInt32(dataReader["OrderId"]),
                         BookId = Convert.ToInt32(dataReader["BookId"]),
                         Name = dataReader["Name"].ToString(),
                         Author = dataReader["Author"].ToString(),
                         Language = dataReader["Language"].ToString(),
-                        Category = dataReader["Category"].ToString(),
-                        Pages = dataReader["Pages"].ToString(),
-                        Price = dataReader["Price"].ToString(),
-                        Quantity = Convert.ToInt32(dataReader["Quantity"])
+                        CustomerName = dataReader["CustomerName"].ToString(),
+                        City = dataReader["City"].ToString(),
+                        State = dataReader["State"].ToString(),
+                        Country = dataReader["Country"].ToString(),
+                        Pincode = dataReader["Pincode"].ToString(),
+                        MobileNumber = dataReader["MobileNumber"].ToString(),
+                        OrderQuantity = Convert.ToInt32(dataReader["OrderQuantity"]),
+                        TotalPrice = Convert.ToInt32(dataReader["TotalPrice"])
                     };
                     bookList.Add(responseData);
                 }
@@ -99,6 +134,42 @@ namespace RepositoryLayer.Services
             }
             catch (Exception ex)
             {
+                throw new Exception(ex.Message);
+            }
+        }
+        public bool DeleteOrderById(int UserId, int OrderId)
+        {
+            try
+            {
+                SQLConnection();
+                using (SqlCommand cmd = new SqlCommand("sp_DeleteOrderById", connection))
+                {
+
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@OrderId", OrderId);
+                    cmd.Parameters.AddWithValue("@UserId", UserId);
+
+                    connection.Open();
+                    SqlDataReader dataReader = cmd.ExecuteReader();
+                    //int CardExist = (int)cmd.ExecuteScalar();
+                    //if (CardExist > 0)
+                    //{
+                    //    return true;
+                    //}
+                    //else
+                    //{
+                    //    return false;
+                    //}
+                    return true;
+
+
+
+                }
+
+            }
+            catch (Exception ex)
+            {
+
                 throw new Exception(ex.Message);
             }
         }

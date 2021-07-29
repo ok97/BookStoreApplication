@@ -23,7 +23,7 @@ namespace BookStoreApplication.Controllers
             this._logger = logger;
         }
 
-        [HttpPost("Add")]
+        [HttpPost]
         public IActionResult AddOrder(OrderRequest order)
         {
             try
@@ -47,8 +47,7 @@ namespace BookStoreApplication.Controllers
                 return BadRequest(new { message = exception.Message });
             }
         }
-
-        [HttpGet]
+        [HttpGet("All")]
         public IActionResult GetListOfOrders()
         {
             try
@@ -59,7 +58,7 @@ namespace BookStoreApplication.Controllers
                 {
                     int UserId = Convert.ToInt32(idClaim.Value);
                     var data = orderBL.GetListOfOrders(UserId);
-                    return Ok(new { success = true, message = "List of Orders Fetched Successfully", data });
+                    return Ok(new { success = true, message = "Get List Of Orders", data });
                 }
                 else
                 {
@@ -69,6 +68,56 @@ namespace BookStoreApplication.Controllers
             }
             catch (Exception ex)
             {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetOrders(int CartId)
+        {
+            try
+            {
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(UserId => UserId.Type.Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
+
+                if (idClaim != null)
+                {
+                    int UserId = Convert.ToInt32(idClaim.Value);
+                    var data = orderBL.GetOrders(UserId, CartId);
+                    return Ok(new { success = true, message = "Order Successfully", data });
+                }
+                else
+                {
+
+                    return NotFound(new { success = true, message = "Please Login User And Then Access" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteOrderById(int OrderId)
+        {
+            try
+            {
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(UserId => UserId.Type.Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
+
+                if (idClaim != null)
+                {
+                    int UserId = Convert.ToInt32(idClaim.Value);
+                    bool result = orderBL.DeleteOrderById(UserId, OrderId);
+                    return this.Ok(new { success = true, message = " Order Delete Successfully" });
+                }
+                else
+                {
+                    return this.NotFound(new { success = false, message = "No such Order Exist", message1 = "Please login User" });
+                }
+            }
+            catch (Exception ex)
+            {
+                bool success = false;
                 return BadRequest(new { ex.Message });
             }
         }
