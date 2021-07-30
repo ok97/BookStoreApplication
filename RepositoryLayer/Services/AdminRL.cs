@@ -34,11 +34,8 @@ namespace RepositoryLayer.Services
         {
             try
             {
-                
-
                 SQLConnection();
                 string encryptedPassword = StringCipher.Encrypt(admin.Password);
-
                 using (SqlCommand cmd = new SqlCommand("sp_AdminRegisterProcedure", connection))
                 {
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
@@ -47,12 +44,10 @@ namespace RepositoryLayer.Services
                     cmd.Parameters.AddWithValue("@Email", admin.Email);
                     cmd.Parameters.AddWithValue("@Password", encryptedPassword);
                     cmd.Parameters.AddWithValue("@Role", "Admin");
-
                     connection.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
                     //responseData = RegistrationResponseModel(dataReader);
                 };
-                
             }
             catch (Exception e)
             {
@@ -60,19 +55,16 @@ namespace RepositoryLayer.Services
             }
         }
 
-
         public string Login(string email, string password)
         {
             try
             {
                 SQLConnection();
                 string encryptedPassword = StringCipher.Encrypt(password);
-
                 SqlCommand cmd = new SqlCommand("sp_AdminLogin", connection);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Email", email);
                 cmd.Parameters.AddWithValue("@Password", encryptedPassword);
-
                 SqlParameter adminId = new SqlParameter("@AdminId", System.Data.SqlDbType.Int);
                 adminId.Direction = System.Data.ParameterDirection.Output;
 
@@ -102,11 +94,8 @@ namespace RepositoryLayer.Services
                    SecurityAlgorithms.HmacSha256Signature)
                 };
                 var token = tokenHandler.CreateToken(tokenDescriptor);
-
                 return tokenHandler.WriteToken(token);
             }
-
-
             catch (Exception e)
             {
                 throw new Exception(e.Message);
@@ -121,16 +110,12 @@ namespace RepositoryLayer.Services
                 SQLConnection();
                 SqlDataAdapter sda = new SqlDataAdapter("SELECT * FROM Admin WHERE Email='" + email + "'", connection);
                 DataTable dt = new DataTable();
-
                 sda.Fill(dt);
                 if (dt.Rows.Count < 1)
                 {
                     return false;
                 }
-
-               
                 MessageQueue queue;
-
                 // Message Queue 
                 if (MessageQueue.Exists(@".\Private$\FundooApplicationQueue"))
                 {
@@ -140,7 +125,6 @@ namespace RepositoryLayer.Services
                 {
                     queue = MessageQueue.Create(@".\Private$\FundooApplicationQueue");
                 }
-
                 Message MyMessage = new Message();
                 MyMessage.Formatter = new BinaryMessageFormatter();
                 MyMessage.Body = email;
@@ -162,13 +146,10 @@ namespace RepositoryLayer.Services
 
         private void msmqQueue_ReceiveCompleted(object sender, ReceiveCompletedEventArgs e)
         {
-
             MessageQueue queue = (MessageQueue)sender;
             Message msg = queue.EndReceive(e.AsyncResult);
             EmailService.SendEmail(e.Message.ToString(), GenerateToken(e.Message.ToString()));
             queue.BeginReceive(TimeSpan.FromSeconds(5));
-
-
         }
         // Generate Token
         public string GenerateToken(string email)
@@ -197,7 +178,6 @@ namespace RepositoryLayer.Services
 
 
         // Change Password
-
         public void ChangePassword(string email, string newPassword)
         {
             try
@@ -208,13 +188,11 @@ namespace RepositoryLayer.Services
                 connection.Open();
                 cmd.ExecuteNonQuery();
                 connection.Close();
-
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
-
     }
 }

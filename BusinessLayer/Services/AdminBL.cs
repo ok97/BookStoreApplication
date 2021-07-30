@@ -15,7 +15,6 @@ namespace BusinessLayer.Services
             this.adminRL = adminRL;
         }
 
-
         public void RegisterAdmin(AdminRegisterRequest admin)
         {
             try
@@ -27,7 +26,6 @@ namespace BusinessLayer.Services
                 throw new Exception(e.Message);
             }
         }
-
 
         public string Login(string email, string password)
         {
@@ -41,7 +39,6 @@ namespace BusinessLayer.Services
             }
         }
 
-        // Forgot Password
         public bool ForgotPassword(string email)
         {
             try
@@ -54,9 +51,6 @@ namespace BusinessLayer.Services
             }
         }
 
-
-
-        // Change Password
         public void ChangePassword(string email, string newPassword)
         {
             try
@@ -68,6 +62,5 @@ namespace BusinessLayer.Services
                 throw new Exception(ex.Message);
             }
         }
-
     }
 }

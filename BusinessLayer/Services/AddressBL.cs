@@ -16,12 +16,19 @@ namespace BusinessLayer.Services
            this.addressRL = addressRL;
         }
 
-
         public AddressResponseData AddAddress(int UserId, AddressRequest address)
         {
-            AddressResponseData adminbookResponseData = addressRL.AddAddress(UserId, address);
-            return adminbookResponseData;
+            try
+            {
+                AddressResponseData adminbookResponseData = addressRL.AddAddress(UserId, address);
+                return adminbookResponseData;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }           
         }
+
         public List<AddressResponseData> GetListOfAddress(int UserId)
         {
             try
@@ -40,23 +47,34 @@ namespace BusinessLayer.Services
             {
                 return this.addressRL.GetListOfAddressid(UserId, addressId);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new Exception(e.Message);
-            }
-          
-        }
-       
+                throw new Exception(ex.Message);
+            }          
+        }       
 
         public bool UpdateAddress(int UserId, int AddressId, AddressRequest address)
         {
-            return this.addressRL.UpdateAddress(UserId, AddressId, address);
+            try
+            {
+                return this.addressRL.UpdateAddress(UserId, AddressId, address);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }          
         }
-
 
         public bool DeleteAddressById(int UserId, int addressid)
         {
-            return this.addressRL.DeleteAddressById(UserId, addressid);
+            try
+            {
+                return this.addressRL.DeleteAddressById(UserId, addressid);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }          
         }
     }
 }

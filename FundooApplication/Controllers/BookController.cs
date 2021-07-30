@@ -18,16 +18,13 @@ namespace BookStoreApplication.Controllers
     {
         //Declare private object for logger object
         private readonly ILoggerService _logger;
-
         IBookBL bookBL;
         public BookController(IBookBL bookBL, ILoggerService logger)
         {
             this.bookBL = bookBL;
             this._logger = logger;
-
         }
-        [HttpPost("AddBook")]
-        //[Route("")]
+        [HttpPost]
         public IActionResult AddBook(AddBooks adminbookData)
         {
             try
@@ -36,18 +33,16 @@ namespace BookStoreApplication.Controllers
                 int adminId = Convert.ToInt32(idClaim.Value);
                 AdminBookResponseData data = bookBL.AddBook(adminId, adminbookData);
                 bool success = false;
-                string message;
-                
+                string message;                
                 if (adminbookData == null)
                 {
                     _logger.LogError("Book Added Failed"); // Logger Error
                     message = $"Book Added Failed";
                     return Ok(new { success, message });
-
                 }
                 else
                 {
-                    _logger.LogInfo($"Book Added Successfully {adminId}"); // Logger Info
+                    _logger.LogInfo($"Book Details Added Successfully {adminId}"); // Logger Info
                     success = true;
                     message = $"Book Added Successfully {adminId}";
                     return Ok(new { success, message, data });
@@ -67,13 +62,13 @@ namespace BookStoreApplication.Controllers
             {
                 var data =  bookBL.GetListOfBooks();
                 if (data != null)
-                {                  
-                    
+                {
+                    _logger.LogInfo("Book Fetched Successfully ");
                     return Ok(new { success=true, message = "List of Books Fetched Successfully", data });
                 }
                 else
                 {
-                   
+                    _logger.LogError("Book Added Failed"); // Logger Error
                     return NotFound(new { success = true, message = "No Books Found" });
                 }
             }
@@ -91,12 +86,12 @@ namespace BookStoreApplication.Controllers
                 var data = bookBL.GetListOfBooksid(bookId);
                 if (data != null)
                 {
-
+                    _logger.LogInfo($"Book Fetched Successfully{bookId} ");
                     return Ok(new { success = true, message = "List of Books Fetched Successfully", data });
                 }
                 else
                 {
-
+                    _logger.LogError($"No Books Found{bookId}"); // Logger Error
                     return NotFound(new { success = true, message = "No Books Found" });
                 }
             }
@@ -106,7 +101,6 @@ namespace BookStoreApplication.Controllers
             }
         }
 
-        // Update Note
         [HttpPut("{bookId}")]
         public IActionResult UpdateBook(int bookId, AddBooks adminbookData)
         {
@@ -114,7 +108,7 @@ namespace BookStoreApplication.Controllers
             {
                 var idClaim = HttpContext.User.Claims.FirstOrDefault(AdminId => AdminId.Type.Equals("AdminId", StringComparison.InvariantCultureIgnoreCase));
                 int adminId = Convert.ToInt32(idClaim.Value);
-                AdminBookResponseData data = bookBL.UpdateBook( bookId, adminId, adminbookData);
+                AdminBookResponseData data = bookBL.UpdateBook(bookId, adminId, adminbookData);
                 bool success = false;
                 string message;
                 if (adminbookData == null)
@@ -138,27 +132,27 @@ namespace BookStoreApplication.Controllers
             }
         }
 
-
-        [HttpDelete("{id}")]
-        public IActionResult DeleteBookById(string id)
+        [HttpDelete("{bookId}")]
+        public IActionResult DeleteBookById(int bookId)
         {
             try
             {
                 var idClaim = HttpContext.User.Claims.FirstOrDefault(AdminId => AdminId.Type.Equals("AdminId", StringComparison.InvariantCultureIgnoreCase));
                 int adminId = Convert.ToInt32(idClaim.Value);
-                bool result = bookBL.DeleteBookById(adminId,id);
+                bool result = bookBL.DeleteBookById(adminId, bookId);
                 if (!result.Equals(false))
                 {
+                    _logger.LogInfo($"Book Delete Successfully {bookId}"); // Logger Info
                     return this.Ok(new { success = true, message = " Books Delete Successfully" });
                 }
                 else
                 {
-                    return this.NotFound(new { success = false, message = "No such BooksId Exist" });
+                    _logger.LogError("Book Delete Failed"); // Logger Error
+                    return this.NotFound(new { success = false, message = "No such Books Id Exist" });
                 }
             }
             catch (Exception ex)
-            {
-                bool success = false;
+            {                
                 return BadRequest(new { ex.Message });
             }
         }

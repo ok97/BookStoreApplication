@@ -14,7 +14,6 @@ namespace RepositoryLayer.Services
         // Add connection code
         private readonly IConfiguration _configuration;
         private SqlConnection connection;
-
         public WishListRL(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -35,12 +34,9 @@ namespace RepositoryLayer.Services
                 {
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@UserId", UserId);
-                    cmd.Parameters.AddWithValue("@BookId", BookId);
-                    
-
+                    cmd.Parameters.AddWithValue("@BookId", BookId);                  
                     connection.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
-
                 };
                 return wishListRequest;
             }
@@ -48,7 +44,6 @@ namespace RepositoryLayer.Services
             {
                 throw new Exception(ex.Message);
             }
-
         }
 
         public List<WishListBookResponse> GetListOfBooksInWishlist(int UserId)
@@ -62,7 +57,6 @@ namespace RepositoryLayer.Services
                 {
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@UserId", UserId);
-
                     connection.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
                     bookList = ListBookResponseModel(dataReader);
@@ -111,11 +105,9 @@ namespace RepositoryLayer.Services
                 SQLConnection();
                 using (SqlCommand cmd = new SqlCommand("sp_DeletewishlistidById", connection))
                 {
-
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@UserId", UserId);
                     cmd.Parameters.AddWithValue("@WishlistId", wishlistid);
-
                     connection.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
                     //int CardExist = (int)cmd.ExecuteScalar();
@@ -128,15 +120,10 @@ namespace RepositoryLayer.Services
                     //    return false;
                     //}
                     return true;
-
-
-
                 }
-
             }
             catch (Exception ex)
             {
-
                 throw new Exception(ex.Message);
             }
         }

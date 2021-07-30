@@ -10,15 +10,13 @@ using System.Text;
 namespace RepositoryLayer.Services
 {
   public class BookRL:IBookRL
-    {
-        // Add connection code
-        private readonly IConfiguration _configuration;
+    {        
+        private readonly IConfiguration _configuration; // Add connection code
         private SqlConnection connection;
         public BookRL(IConfiguration configuration)
         {
             _configuration = configuration;
         }
-
         public void SQLConnection()
         {
             string sqlConnectionString = _configuration.GetConnectionString("BookStoreDB");
@@ -41,9 +39,7 @@ namespace RepositoryLayer.Services
                     cmd.Parameters.AddWithValue("@Category", adminbookData.Category);
                     cmd.Parameters.AddWithValue("@Pages", adminbookData.Pages);
                     cmd.Parameters.AddWithValue("@Price", adminbookData.Price);
-                    cmd.Parameters.AddWithValue("@Quantity", adminbookData.Quantity);
-
-                 
+                    cmd.Parameters.AddWithValue("@Quantity", adminbookData.Quantity);                 
                     connection.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
                     adminbookResponseData = BookResponseModel(dataReader);
@@ -55,7 +51,6 @@ namespace RepositoryLayer.Services
                 throw new Exception(ex.Message);
             }
         }
-
         private AdminBookResponseData BookResponseModel(SqlDataReader dataReader)
         {
             try
@@ -93,7 +88,6 @@ namespace RepositoryLayer.Services
                 using (SqlCommand cmd = new SqlCommand("sp_GetListOfBooks", connection))
                 {
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
                     connection.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
                     bookList = ListBookResponseModel(dataReader);
@@ -117,7 +111,6 @@ namespace RepositoryLayer.Services
                 {
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@BookId", bookId);
-
                     connection.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
                     bookList = ListBookResponseModel(dataReader);
@@ -129,7 +122,6 @@ namespace RepositoryLayer.Services
                 throw new Exception(ex.Message);
             }
         }
-
         private List<AdminBookResponseData> ListBookResponseModel(SqlDataReader dataReader)
         {
             try
@@ -158,9 +150,6 @@ namespace RepositoryLayer.Services
                 throw new Exception(ex.Message);
             }
         }
-
-
-
         public AdminBookResponseData UpdateBook(int bookId, int adminId, AddBooks adminbookData)
         {
             try
@@ -178,11 +167,8 @@ namespace RepositoryLayer.Services
                     cmd.Parameters.AddWithValue("@Category", adminbookData.Category);
                     cmd.Parameters.AddWithValue("@Pages", adminbookData.Pages);
                     cmd.Parameters.AddWithValue("@Price", adminbookData.Price);
-
-
                     connection.Open();
-                    SqlDataReader dataReader = cmd.ExecuteReader();
-                 
+                    SqlDataReader dataReader = cmd.ExecuteReader();                 
                     adminbookResponseData = BookResponseModel(dataReader);
                 }
                 return adminbookResponseData;
@@ -192,30 +178,23 @@ namespace RepositoryLayer.Services
                 throw new Exception(ex.Message);
             }
         }
-
-
-
-        public bool DeleteBookById(int adminId,string BookId)
+        public bool DeleteBookById(int adminId,int bookId)
         {
             try
             {
                 SQLConnection();
                 using (SqlCommand cmd = new SqlCommand("sp_DeleteBookByIdProcedure", connection))
                 {
-
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@BookId", BookId);
+                    cmd.Parameters.AddWithValue("@BookId", bookId);
                     cmd.Parameters.AddWithValue("@AdminId", adminId);
-
                     connection.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
                     return true;
-                }
-               
+                }               
             }
             catch (Exception ex)
             {
-
                 throw new Exception(ex.Message);
             }
         }

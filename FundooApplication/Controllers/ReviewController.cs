@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 
 namespace BookStoreApplication.Controllers
 {
-   
-       [Route("api/[controller]")]
+    [Authorize]
+    [Route("api/[controller]")]
     [ApiController]
     public class ReviewController : ControllerBase
     {
@@ -35,20 +35,21 @@ namespace BookStoreApplication.Controllers
                 var data = this.reviewBL.AddReview(UserId, BookId, review);
                 if (data != null)
                 {
+                    _logger.LogInfo($"Review Added To Book Successfully {UserId}"); // Logger Info
                     return this.Ok(new { status = "True", message = "Review Added To Book Successfully", data });
                 }
                 else
                 {
-
+                    _logger.LogError($"Failed To Add Review {UserId}"); // Logger Error   
                     return this.BadRequest(new { status = "False", message = "Failed To Add Review" });
                 }
-
             }
             catch (Exception exception)
             {
                 return BadRequest(new { message = exception.Message });
             }
         }
+
         [HttpGet]
         public IActionResult GetListOfReview()
         {
@@ -59,13 +60,13 @@ namespace BookStoreApplication.Controllers
                 var data = reviewBL.GetListOfReview(UserId);
                 if (data != null)
                 {
-                    
+                    _logger.LogInfo($"List of Review Fetched Successfully {UserId}"); // Logger Info
                     return Ok(new { success = true, message = "List of Review Fetched Successfully", data });
                 }
                 else
                 {
-
-                    return NotFound(new { success = true, message = "Field" });
+                    _logger.LogError($"List of Review Fetched Failed {UserId}"); // Logger Error   
+                    return NotFound(new { success = true, message = "List of Review Fetched Field" });
                 }
             }
             catch (Exception ex)
@@ -73,7 +74,5 @@ namespace BookStoreApplication.Controllers
                 return BadRequest(new { ex.Message });
             }
         }
-
-
     }
 }

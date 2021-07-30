@@ -14,15 +14,11 @@ namespace RepositoryLayer.Services
         // Add connection code
         private readonly IConfiguration _configuration;
         private SqlConnection connection;
-
-
-
         public CartRL(IConfiguration configuration)
         {
             _configuration = configuration;
 
         }
-
         public void SQLConnection()
         {
             string sqlConnectionString = _configuration.GetConnectionString("BookStoreDB");
@@ -32,18 +28,14 @@ namespace RepositoryLayer.Services
         {
             try
             {
-
                 SQLConnection();
                 using (SqlCommand cmd = new SqlCommand("sp_AddBookIntoCart", connection))
                 {
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@UserId", UserId);
-                    cmd.Parameters.AddWithValue("@BookId", BookId);
-                    // cmd.Parameters.AddWithValue("@OrderQuantity", '1');
-
+                    cmd.Parameters.AddWithValue("@BookId", BookId);                 
                     connection.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
-
                 };
                 return false;
             }
@@ -64,7 +56,6 @@ namespace RepositoryLayer.Services
                 {
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@UserId", UserId);
-
                     connection.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
                     bookList = ListBookCartResponseModel(dataReader);
@@ -98,8 +89,7 @@ namespace RepositoryLayer.Services
                         OrderQuantity = Convert.ToInt32(dataReader["OrderQuantity"]),
                         TotalPrice = Convert.ToInt32(dataReader["TotalPrice"]),
                     };
-                    bookList.Add(responseData);
-                   
+                    bookList.Add(responseData);                   
                 }
                 SQLConnection();
                 using (SqlCommand cmd = new SqlCommand("sp_UpdateTotalPrice", connection))
@@ -107,11 +97,9 @@ namespace RepositoryLayer.Services
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@BookId", responseData.BookId);
                     cmd.Parameters.AddWithValue("@TotalPrice", responseData.TotalPrice);
-
                     connection.Open();
                      cmd.ExecuteReader();
                 }
-
                     return bookList;
             }
             catch (Exception ex)
@@ -129,24 +117,18 @@ namespace RepositoryLayer.Services
                 using (SqlCommand cmd = new SqlCommand("sp_SelectQuantity", connection))
                 {
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@BookId", BookId);
+                    cmd.Parameters.AddWithValue("@BookId", BookId);  
                     
-
                     SqlParameter BQuantity = new SqlParameter("@Quantity", System.Data.SqlDbType.Int);
-                    BQuantity.Direction = System.Data.ParameterDirection.Output;
+                    BQuantity.Direction = System.Data.ParameterDirection.Output;                      
+                    cmd.Parameters.Add(BQuantity);  
                     
-
-                    cmd.Parameters.Add(BQuantity);
-                   
-
                     connection.Open();
                     cmd.ExecuteNonQuery();
                     string bQuantity = (cmd.Parameters["@Quantity"].Value).ToString();
                     int result = Int32.Parse(bQuantity);
-
                     if ( quantity > result )
                     {
-
                         Console.WriteLine("Failed");
                         return false;
                     }
@@ -159,18 +141,11 @@ namespace RepositoryLayer.Services
                             ccmd.Parameters.AddWithValue("@UserId", UserId);
                             ccmd.Parameters.AddWithValue("@BookId", BookId);
                             ccmd.Parameters.AddWithValue("@OrderQuantity", quantity);
-
-
                             connection.Open();
                             SqlDataReader dataReader = ccmd.ExecuteReader();
-
                         };
                     }
-
-                }
-                
-
-               
+                }               
                 return true;
             }
             catch (Exception ex)
@@ -179,17 +154,15 @@ namespace RepositoryLayer.Services
             }
         }
 
-        public bool DeleteCartById(int UserId, string id)
+        public bool DeleteCartById(int UserId, int id)
         {
             try
             {
                 SQLConnection();
                 using (SqlCommand cmd = new SqlCommand("sp_DeleteCartByIdProcedure", connection))
                 {
-
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@CartId", id);                    
-
+                    cmd.Parameters.AddWithValue("@CartId", id);              
                     connection.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
                     //int CardExist = (int)cmd.ExecuteScalar();
@@ -201,16 +174,11 @@ namespace RepositoryLayer.Services
                     //{
                     //    return false;
                     //}
-                    return true;
-
-                    
-
+                    return true;                   
                 }
-
             }
             catch (Exception ex)
             {
-
                 throw new Exception(ex.Message);
             }
         }

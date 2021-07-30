@@ -10,23 +10,9 @@ namespace BusinessLayer.Interfaces
 {
     public interface IUserBL
     {
-        //bool SampleApi(Users newUser);
-
-        void RegisterUser(RegisterUserRequest user);
-
-        // get data
-        //List<Users> GetUsersData();
-
-
-        // User login
-        string Login(string email, string password);
-
-
-        // Forgot Password
-        bool ForgotPassword(string email);
-
-        // Change Password
-        void ChangePassword(string email, string newPassword);
-
+        void RegisterUser(RegisterUserRequest user);    // Register User
+        string Login(string email, string password); // User login      
+        bool ForgotPassword(string email);  // Forgot Password       
+        void ChangePassword(string email, string newPassword); // Change Password
     }
 }

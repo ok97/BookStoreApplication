@@ -17,22 +17,7 @@ namespace BusinessLayer.Services
         public UserBL(IUserRL userRL)
         {
             this.userRL = userRL;
-        }
-        /*
-        //post request Add
-        public bool SampleApi(Users newUser)
-        {
-            try
-            {
-                newUser.FirstName = newUser.FirstName + "Update From BL";
-                return this.userRL.SampleApi(newUser);
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-        }*/
+        }        
         public void RegisterUser(RegisterUserRequest user)
         {
             try
@@ -44,27 +29,7 @@ namespace BusinessLayer.Services
                 throw new Exception(e.Message);
             }
         }
-
-        //public string AuthenticateUser(string email, string password)
-        //{
-        //    try
-        //    {
-        //        return this.userRL.AuthenticateUser(email, password);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        throw new Exception(e.Message);
-        //    }
-        //}
-
-        //get data
-
-        //public List<Users> GetUsersData()
-        //{
-        //    List<Users> usersList = userRL.GetUsersData();
-        //    return usersList;
-        //}
-
+        
         //Users login
         public string Login(string email, string password)
         {
@@ -78,8 +43,6 @@ namespace BusinessLayer.Services
             }
         }
 
-
-
         // Forgot Password
         public bool ForgotPassword(string email)
         {
@@ -92,8 +55,6 @@ namespace BusinessLayer.Services
                 throw new Exception(ex.Message);
             }
         }
-
-
         // Change Password
         public void ChangePassword(string email, string newPassword)
         {
@@ -106,8 +67,5 @@ namespace BusinessLayer.Services
                 throw new Exception(ex.Message);
             }
         }
-
-
-
     }
 }

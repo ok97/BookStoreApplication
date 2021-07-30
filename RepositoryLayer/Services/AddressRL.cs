@@ -41,9 +41,7 @@ namespace RepositoryLayer.Services
                     cmd.Parameters.AddWithValue("@State", address.State);
                     cmd.Parameters.AddWithValue("@Country", address.Country);
                     cmd.Parameters.AddWithValue("@Pincode", address.Pincode);
-                    cmd.Parameters.AddWithValue("@MobileNumber", address.MobileNumber);                 
-
-
+                    cmd.Parameters.AddWithValue("@MobileNumber", address.MobileNumber);   
                     connection.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
                     adminaddressResponseData = BookResponseModel(dataReader);
@@ -106,7 +104,6 @@ namespace RepositoryLayer.Services
             }
         }
 
-
         public List<AddressResponseData> GetListOfAddressid(int UserId, int addressId)
         {
             try
@@ -119,7 +116,6 @@ namespace RepositoryLayer.Services
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@UserId", UserId);
                     cmd.Parameters.AddWithValue("@AddressId", addressId);
-
                     connection.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
                     bookList = ListBookResponseModel(dataReader);
@@ -176,19 +172,13 @@ namespace RepositoryLayer.Services
                     cmd.Parameters.AddWithValue("@Country", address.Country);
                     cmd.Parameters.AddWithValue("@Pincode", address.Pincode);
                     cmd.Parameters.AddWithValue("@MobileNumber", address.MobileNumber);
-
-
                     connection.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
-
                 };
                 return true;
-
-
             }
             catch (Exception )
             {
-
                 throw;
             }    
         }
@@ -200,35 +190,18 @@ namespace RepositoryLayer.Services
                 SQLConnection();
                 using (SqlCommand cmd = new SqlCommand("sp_DeleteAddressById", connection))
                 {
-
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@UserId", UserId);
                     cmd.Parameters.AddWithValue("@AddressId", addressid);
-
                     connection.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
-                    //int CardExist = (int)cmd.ExecuteScalar();
-                    //if (CardExist > 0)
-                    //{
-                    //    return true;
-                    //}
-                    //else
-                    //{
-                    //    return false;
-                    //}
-                    return true;
-
-
-
-                }
-
+                };
+                return true;
             }
             catch (Exception ex)
             {
-
                 throw new Exception(ex.Message);
             }
         }
-
     }
 }

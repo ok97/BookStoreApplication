@@ -26,16 +26,12 @@ namespace BookStoreApplication.Controllers
     public class UserController : ControllerBase
     {
         //Declare private object for logger object
-        private readonly ILoggerService _logger;
-       
-
+        private readonly ILoggerService _logger;      
         private IUserBL userBL;  //object IUser class
-        
         public UserController(IUserBL userBL, ILoggerService logger)
         {
             this.userBL = userBL;
             _logger = logger; 
-
         }
 
         // Register User
@@ -45,54 +41,24 @@ namespace BookStoreApplication.Controllers
         {
             try
             {
-                _logger.LogInfo("Register Account Successfull");
-
+                _logger.LogInfo("User Register Account Successfull");
                 this.userBL.RegisterUser(user);
-               string userFullName = user.FirstName + " " + user.LastName;
-                
+               string userFullName = user.FirstName + " " + user.LastName;                
                 return this.Ok(new { success = true, message = $"Hello {userFullName} Your Account Created Successfully {user.Email}" });
-              
-                
-                
-
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-               
-                return this.BadRequest(new { success = false, message = $"Registration Failed {e.Message}" });
-               
-                _logger.LogError("Registration Failed");
+                _logger.LogError("User Registration Failed");
+                return this.BadRequest(new { success = false, message = $"Registration Failed {ex.Message}" });
             }
-        }
-
-        //Get data
-
-
-        //[HttpGet]
-        //[Route("Get")]
-        //public ActionResult GetUsersData()
-        //{
-        //    try
-        //    {
-        //        List<Users> userData = userBL.GetUsersData();
-        //        return Ok(userData.ToList());
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(new { ex.Message });
-        //    }
-        //}
-
-
+        }      
         // User Login
         [AllowAnonymous]
         [HttpPost("Login")]
         public IActionResult Login(Login cred)
         {
             var token = this.userBL.Login(cred.Email, cred.Password);
-
             UserResponce data = new UserResponce();
-
             string message, userFullName;
             bool success = false;
             if (token == null)
@@ -100,11 +66,10 @@ namespace BookStoreApplication.Controllers
                 _logger.LogWarn("Invalid Email and Password");
                 message = "Enter Valid Email & Password";
                 return Ok(new { success, message });
-
             }
             else
             {
-                _logger.LogInfo("Login user");
+                _logger.LogInfo("Logged in Successfully");
                 success = true;
                 userFullName = data.FirstName + " " + data.LastName;
                 message = "Hello " + userFullName + ", You Logged in Successfully";
@@ -112,16 +77,7 @@ namespace BookStoreApplication.Controllers
             }
         }
 
-        //[HttpGet("GetUser")]
-        //public string GetUser()
-        //{
-        //    var UserEmail = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("Email", StringComparison.InvariantCultureIgnoreCase));
-        //    var UserId = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
-        //    return $" CLAIMS Email:{UserEmail.Value} UserId:{UserId.Value}";
-        //}
-
         //// Forgot Password
-
         [AllowAnonymous]
         [HttpPost("Forgot Password")]
         public ActionResult ForgotPassword(ForgotPassword user)
@@ -131,7 +87,7 @@ namespace BookStoreApplication.Controllers
                 bool isExist = this.userBL.ForgotPassword(user.Email);
                 if (isExist)
                 {
-                    _logger.LogInfo("Forgot Password");
+                    _logger.LogInfo($"Forgot Password Reset Link sent to {user.Email}");
                     Console.WriteLine($"Email User Exist with {user.Email}");
                     return Ok(new { success = true, message = $"Reset Link sent to {user.Email}" });
                 }
@@ -139,9 +95,7 @@ namespace BookStoreApplication.Controllers
                 {
                     _logger.LogError("Forgot Password Failed");
                     return BadRequest(new { success = false, message = $"No user Exist with {user.Email}" });
-
                 }
-
             }
             catch (Exception e)
             {
@@ -150,37 +104,28 @@ namespace BookStoreApplication.Controllers
         }
 
         //  Change Password
-
-        [HttpPut("Reset Password")]
+        [HttpPut("Reset")]
         public ActionResult ResetPassword(UserRestPassword user)
         {
             try
             {
                 if (user.NewPassword == user.ConfirmPassword)
                 {
+                    _logger.LogInfo("Your Account Password Changed Successfully");
                     var EmailClaim = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals("Email", StringComparison.InvariantCultureIgnoreCase));
                     this.userBL.ChangePassword(EmailClaim.Value, user.NewPassword);
                     return Ok(new { success = true, message = "Your Account Password Changed Successfully", Email = $"{EmailClaim.Value}" });
-
                 }
                 else
                 {
                     _logger.LogWarn($"This is a warning ");
                     return Ok(new { success = false, message = "New Password and Confirm Password are not equal." });
-
                 }
-
-
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
-
-
-
-
-
     }
 }

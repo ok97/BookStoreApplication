@@ -17,7 +17,14 @@ namespace BusinessLayer.Services
         }
         public WishListRequest AddBookToWishList(int UserId, int BookId)
         {
-            return this.wishListRL.AddBookToWishList(UserId, BookId);
+            try
+            {
+                return this.wishListRL.AddBookToWishList(UserId, BookId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }           
         }
 
         public List<WishListBookResponse> GetListOfBooksInWishlist(int UserId)
@@ -26,14 +33,21 @@ namespace BusinessLayer.Services
             {
                 return this.wishListRL.GetListOfBooksInWishlist(UserId);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new Exception(e.Message);
+                throw new Exception(ex.Message);
             }
         }
         public bool DeleteWishListById(int UserId, int wishlistid)
         {
-            return this.wishListRL.DeleteWishListById(UserId,wishlistid);
+            try
+            {
+                return this.wishListRL.DeleteWishListById(UserId, wishlistid);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }            
         }
     }
 }

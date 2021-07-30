@@ -24,47 +24,48 @@ namespace BookStoreApplication.Controllers
             this._logger = logger;
             this.addressBL = addressBL;
         }
-        [HttpPost("Add")]
+
+        [HttpPost]
         public IActionResult AddAddress(AddressRequest address)
         {
             try
             {
                 var idClaim = HttpContext.User.Claims.FirstOrDefault(UserId => UserId.Type.Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
-
-                if (idClaim != null)
-                {
-                    int UserId = Convert.ToInt32(idClaim.Value);
-                    var data = this.addressBL.AddAddress(UserId, address);
+                int UserId = Convert.ToInt32(idClaim.Value);
+                var data = this.addressBL.AddAddress(UserId, address);
+                if (data != null)
+                {                   
+                    _logger.LogInfo($"Address Added Successfully {UserId}"); // Logger Info
                     return this.Ok(new { status = "True", message = "Address Added Successfully", data });
                 }
                 else
                 {
-
+                    _logger.LogError("Failed To Add Address"); // Logger Error
                     return this.BadRequest(new { status = "False", message = "Failed To Add Address", message1 = "Please Login User " });
                 }
-
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                return BadRequest(new { message = exception.Message });
+                return BadRequest(new { message = ex.Message });
             }
         }
+
         [HttpGet]
         public IActionResult GetListOfAddress()
         {
             try
             {
                 var idClaim = HttpContext.User.Claims.FirstOrDefault(UserId => UserId.Type.Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
-
-                if (idClaim != null)
+                int UserId = Convert.ToInt32(idClaim.Value);
+                var data = this.addressBL.GetListOfAddress(UserId);
+                if (data != null)
                 {
-                    int UserId = Convert.ToInt32(idClaim.Value);
-                    var data = this.addressBL.GetListOfAddress(UserId);
+                    _logger.LogInfo($"list Of Address Display Successfully {UserId}"); // Logger Info               
                     return this.Ok(new { status = "True", message = "list Of Address Display Successfully", data });
                 }
                 else
                 {
-
+                    _logger.LogError("No Address Found"); // Logger Error
                     return NotFound(new { success = true, message = "No Address Found" });
                 }
             }
@@ -79,16 +80,16 @@ namespace BookStoreApplication.Controllers
             try
             {
                 var idClaim = HttpContext.User.Claims.FirstOrDefault(UserId => UserId.Type.Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
-
-                if (idClaim != null)
+                int UserId = Convert.ToInt32(idClaim.Value);
+                var data = this.addressBL.GetListOfAddressid(UserId, addressId);
+                if (data != null)
                 {
-                    int UserId = Convert.ToInt32(idClaim.Value);
-                    var data = this.addressBL.GetListOfAddressid(UserId, addressId);
+                    _logger.LogInfo($" Address Display Successfully {UserId}"); // Logger Info
                     return this.Ok(new { status = "True", message = "Address Display Successfully", data });
                 }
                 else
                 {
-
+                    _logger.LogError($"No Address Found {UserId}"); // Logger Error
                     return NotFound(new { success = false, message = "No Address Found" });
                 }
             }
@@ -105,15 +106,16 @@ namespace BookStoreApplication.Controllers
             try
             {
                 var idClaim = HttpContext.User.Claims.FirstOrDefault(UserId => UserId.Type.Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
-
+                int UserId = Convert.ToInt32(idClaim.Value);
+                var data = this.addressBL.UpdateAddress(UserId, AddressId, address);
                 if (idClaim != null)
                 {
-                    int UserId = Convert.ToInt32(idClaim.Value);
-                    var data = this.addressBL.UpdateAddress(UserId, AddressId, address);
+                    _logger.LogInfo($"Address update Successfully {UserId}"); // Logger Info              
                     return this.Ok(new { status = "True", message = "Address update Successfully", data });
                 }
                 else
                 {
+                    _logger.LogError($"Failed Address update {UserId}"); // Logger Error
                     return this.BadRequest(new { status = "False", message = "Failed Address update", message1 = "Please login user" });
                 }
             }
@@ -128,21 +130,21 @@ namespace BookStoreApplication.Controllers
             try
             {
                 var idClaim = HttpContext.User.Claims.FirstOrDefault(UserId => UserId.Type.Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
-
+                int UserId = Convert.ToInt32(idClaim.Value);
+                bool result = addressBL.DeleteAddressById(UserId, addressid);
                 if (idClaim != null)
                 {
-                    int UserId = Convert.ToInt32(idClaim.Value);
-                    bool result = addressBL.DeleteAddressById(UserId, addressid);
+                    _logger.LogInfo($"Address Delete Successfully {UserId}"); // Logger Info 
                     return this.Ok(new { success = true, message = " Address Delete Successfully" });
                 }
                 else
                 {
-                    return this.NotFound(new { success = false, message = "No such Address Exist", message1 = "Please login User" });
+                    _logger.LogError($"No such Address Exist {UserId}"); // Logger Error
+                    return this.NotFound(new { success = false, message = "Address Delete Failed", message1 = "Please login User" });
                 }
             }
             catch (Exception ex)
-            {
-                bool success = false;
+            {                
                 return BadRequest(new { ex.Message });
             }
         }

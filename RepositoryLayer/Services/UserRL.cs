@@ -8,7 +8,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using RepositoryLayer.Interface;
-
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -21,34 +20,7 @@ using System.Text;
 namespace RepositoryLayer.Services
 {
     public class UserRL : IUserRL
-    {
-        // DB
-        IList<Users> users = new List<Users>();
-        public bool SampleApi(Users newUser)
-        {
-            try
-            {
-                users.Add(newUser);
-                if (users.Contains(newUser) == true)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-        }
-
-        //Add User
-        //  private readonly UserContext _userDBContext;
+    {       
 
         // Add connection code
         private readonly IConfiguration _configuration;
@@ -57,7 +29,6 @@ namespace RepositoryLayer.Services
         {
             _configuration = configuration;
         }
-
 
         public void SQLConnection()
         {
@@ -70,10 +41,8 @@ namespace RepositoryLayer.Services
             try
             {
                 UserResponce responseData = null;
-
                 SQLConnection();
                 string encryptedPassword = StringCipher.Encrypt(user.Password);
-
                 using (SqlCommand cmd = new SqlCommand("dbo.UserRegisterProcedure", connection))
                 {
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
@@ -82,7 +51,6 @@ namespace RepositoryLayer.Services
                     cmd.Parameters.AddWithValue("@Email", user.Email);
                     cmd.Parameters.AddWithValue("@Password", encryptedPassword);
                     cmd.Parameters.AddWithValue("@Role", "Customer");
-
                     connection.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
                     responseData = RegistrationResponseModel(dataReader);
@@ -103,14 +71,11 @@ namespace RepositoryLayer.Services
                 while (dataReader.Read())
                 {
                     responseData = new UserResponce
-                    {
-                        //  UserId = Convert.ToInt32(dataReader["UserID"]),
+                    {//  UserId = Convert.ToInt32(dataReader["UserID"]),
                         FirstName = dataReader["FirstName"].ToString(),
                         LastName = dataReader["LastName"].ToString(),
-
                         Email = dataReader["Email"].ToString(),
                         Password = dataReader["Password"].ToString()
-
                     };
                 }
                 return responseData;
@@ -119,48 +84,14 @@ namespace RepositoryLayer.Services
             {
                 throw new Exception(ex.Message);
             }
-        }
-
-
-        //get data
-        //public List<Users> GetUsersData()
-        //{
-        //    try
-        //    {
-        //        var usersList = new List<Users>();
-        //        Users responseData = null;
-        //        var users = _userDBContext.Users;
-        //        foreach(Users user in users)
-        //        {
-        //            responseData = new Users()
-        //            {
-        //                UserId = user.UserId,
-        //                FirstName = user.FirstName,
-        //                LastName = user.LastName,
-        //                Email = user.Email,
-        //                Password = user.Password
-        //            };
-        //            usersList.Add(responseData);
-        //        }
-        //        return usersList;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception(ex.Message);
-        //    }
-        //}
-
-        // User Login
+        }    
 
         public string Login(string email, string password)
         {
             try
-            {
-                // UserResponce responseData = null;
-
+            {             
                 SQLConnection();
-                string encryptedPassword = StringCipher.Encrypt(password);
-                
+                string encryptedPassword = StringCipher.Encrypt(password);                
                 SqlCommand cmd = new SqlCommand("UserLogin", connection);
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Email", email);
@@ -202,16 +133,11 @@ namespace RepositoryLayer.Services
 
                 return tokenHandler.WriteToken(token);
             }
-
-
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
         }
-
-
-
 
         // Forgot Password
         public bool ForgotPassword(string email)
@@ -221,7 +147,6 @@ namespace RepositoryLayer.Services
                 SQLConnection();
                 SqlDataAdapter sda = new SqlDataAdapter("SELECT * FROM Users WHERE Email='" + email + "'",connection);
                 DataTable dt = new DataTable();
-
                 sda.Fill(dt);
                 if (dt.Rows.Count < 1)
                 {
@@ -266,13 +191,10 @@ namespace RepositoryLayer.Services
 
         private void msmqQueue_ReceiveCompleted(object sender, ReceiveCompletedEventArgs e)
         {
-
             MessageQueue queue = (MessageQueue)sender;
             Message msg = queue.EndReceive(e.AsyncResult);
             EmailService.SendEmail(e.Message.ToString(), GenerateToken(e.Message.ToString()));
             queue.BeginReceive(TimeSpan.FromSeconds(5));
-
-
         }
 
         // Generate Token
@@ -301,7 +223,6 @@ namespace RepositoryLayer.Services
         }
 
         // Change Password
-
         public void ChangePassword(string email, string newPassword)
         {
             try
@@ -311,18 +232,12 @@ namespace RepositoryLayer.Services
                 SqlCommand cmd = new SqlCommand("UPDATE [dbo].[Users] SET[Password] ='" + encryptedPassword + "' WHERE Email ='" + email + "' ", connection);
                 connection.Open();
                 cmd.ExecuteNonQuery();
-                connection.Close();
-                
+                connection.Close();                
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
-
-
-
     }
-
-
 }

@@ -13,9 +13,6 @@ namespace RepositoryLayer.Services
         // Add connection code
         private readonly IConfiguration _configuration;
         private SqlConnection connection;
-
-
-
         public OrderRL(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -32,18 +29,15 @@ namespace RepositoryLayer.Services
         {
             try
             {
-
                 SQLConnection();
                 using (SqlCommand cmd = new SqlCommand("sp_AddOrder", connection))
                 {
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@UserId", UserId);
                     cmd.Parameters.AddWithValue("@CartId", CartId);
-                    cmd.Parameters.AddWithValue("@AddressId", AddressId);
-                   
+                    cmd.Parameters.AddWithValue("@AddressId", AddressId);                   
                     connection.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
-
                 };
                 return false;
             }
@@ -53,8 +47,7 @@ namespace RepositoryLayer.Services
             }
         }
         public List<OrderResponse> GetListOfOrders(int UserId)
-        {
-           
+        {           
             try
             {
                 List<OrderResponse> bookList = null;
@@ -77,8 +70,7 @@ namespace RepositoryLayer.Services
             }
         }
         public List<OrderResponse> GetOrders(int UserId, int CartId)
-        {
-            //GetListOfOrders
+        {         
             try
             {
                 List<OrderResponse> bookList = null;
@@ -89,7 +81,6 @@ namespace RepositoryLayer.Services
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@UserId", UserId);
                     cmd.Parameters.AddWithValue("@CartId", CartId);
-
                     connection.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
                     bookList = ListBookResponseModel(dataReader);
@@ -144,32 +135,16 @@ namespace RepositoryLayer.Services
                 SQLConnection();
                 using (SqlCommand cmd = new SqlCommand("sp_DeleteOrderById", connection))
                 {
-
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@OrderId", OrderId);
                     cmd.Parameters.AddWithValue("@UserId", UserId);
-
                     connection.Open();
-                    SqlDataReader dataReader = cmd.ExecuteReader();
-                    //int CardExist = (int)cmd.ExecuteScalar();
-                    //if (CardExist > 0)
-                    //{
-                    //    return true;
-                    //}
-                    //else
-                    //{
-                    //    return false;
-                    //}
+                    SqlDataReader dataReader = cmd.ExecuteReader();                   
                     return true;
-
-
-
-                }
-
+                };
             }
             catch (Exception ex)
             {
-
                 throw new Exception(ex.Message);
             }
         }

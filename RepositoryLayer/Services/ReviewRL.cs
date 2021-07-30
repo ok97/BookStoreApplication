@@ -40,7 +40,6 @@ namespace RepositoryLayer.Services
                     cmd.Parameters.AddWithValue("@Feedback", review.Feedback);
                     connection.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
-
                 };
                 return reviewRequest;
             }

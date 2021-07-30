@@ -18,7 +18,14 @@ namespace BusinessLayer.Services
 
         public ReviewRequest AddReview(int bookId, int UserId, ReviewRequest review)
         {
-            return this.reviewRL.AddReview(bookId, UserId, review);
+            try
+            {
+                return this.reviewRL.AddReview(bookId, UserId, review);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }           
         }
 
         public List<ReviewListBookResponse> GetListOfReview(int UserId)
@@ -27,9 +34,9 @@ namespace BusinessLayer.Services
             {
                 return this.reviewRL.GetListOfReview(UserId);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new Exception(e.Message);
+                throw new Exception(ex.Message);
             }
         }
     }
