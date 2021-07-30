@@ -23,7 +23,7 @@ namespace BookStoreApplication.Controllers
         }
 
 
-        [HttpPost("Add")]
+        [HttpPost]
         public IActionResult AddBookToWishList(int BookId)
         {
             try
@@ -38,13 +38,63 @@ namespace BookStoreApplication.Controllers
                 else
                 {
 
-                    return this.BadRequest(new { status = "False", message = "Failed To Add Cart", message1 = "Please Login User " });
+                    return this.BadRequest(new { status = "False", message = "Failed To Add WishList" });
                 }
 
             }
             catch (Exception exception)
             {
                 return BadRequest(new { message = exception.Message });
+            }
+        }
+
+
+        [HttpGet]
+        public IActionResult GetListOfBooksInWishlist()
+        {
+            try
+            {
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(UserId => UserId.Type.Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
+
+                if (idClaim != null)
+                {
+                    int UserId = Convert.ToInt32(idClaim.Value);
+                    var data = wishListBL.GetListOfBooksInWishlist(UserId);
+                    return Ok(new { success = true, message = "List of Wishlist Fetched Successfully", data });
+                }
+                else
+                {
+
+                    return NotFound(new { success = true, message = "Please Login User And Then Access" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteWishListById(int wishlistid)
+        {
+            try
+            {
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(UserId => UserId.Type.Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
+                int UserId = Convert.ToInt32(idClaim.Value);
+                bool data = wishListBL.DeleteWishListById(UserId, wishlistid);
+                if (!data.Equals(false))
+                {                    
+                    return this.Ok(new { success = true, message = " WishList Delete Successfully" });
+                }
+                else
+                {
+                    return this.NotFound(new { success = false, message = "No such CartId Exist", message1 = "Please login User" });
+                }
+            }
+            catch (Exception ex)
+            {
+                bool success = false;
+                return BadRequest(new { ex.Message });
             }
         }
     }

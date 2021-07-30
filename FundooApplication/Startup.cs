@@ -57,8 +57,14 @@ namespace BookStoreApplication
             services.AddTransient<IOrderBL, OrderBL>();
             services.AddTransient<IOrderRL, OrderRL>();  
             services.AddTransient<IWishListBL, WishListBL>();
-            services.AddTransient<IWishListRL, WishListRL>(); 
-          
+            services.AddTransient<IWishListRL, WishListRL>();
+            services.AddTransient<IReviewBL, ReviewBL>();
+            services.AddTransient<IReviewRL, ReviewRL>();
+
+           
+
+
+
 
 
 
