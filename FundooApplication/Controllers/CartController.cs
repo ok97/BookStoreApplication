@@ -2,6 +2,7 @@
 using BusinessLayer.Interfaces;
 using CommonLayer.RequestModel;
 using CommonLayer.ResponseModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BookStoreApplication.Controllers
 {
-
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class CartController : ControllerBase
@@ -25,18 +26,15 @@ namespace BookStoreApplication.Controllers
 
         }
         [HttpPost("Add")]
-        public IActionResult AddBookToCart(CartRequest cart)
+        public IActionResult AddBookToCart(int BookId)
         {
             try
             {
                 var idClaim = HttpContext.User.Claims.FirstOrDefault(UserId => UserId.Type.Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
-                      
-
-
                 if (idClaim != null)
                 {
                     int UserId = Convert.ToInt32(idClaim.Value);
-                    var data = this.cartBL.AddBookToCart(UserId, cart.BookId);
+                    var data = this.cartBL.AddBookToCart(UserId, BookId);
                     return this.Ok(new { status = "True", message = "Book Added To Cart Successfully", data });
                 }
                 else
