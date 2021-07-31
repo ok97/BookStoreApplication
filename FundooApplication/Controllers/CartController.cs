@@ -100,6 +100,57 @@ namespace BookStoreApplication.Controllers
             }
         }
 
+        [HttpPut("Increase")]
+        public IActionResult IncreaseBookQuantityintoCart(int BookId)
+        {
+            try
+            {
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(UserId => UserId.Type.Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
+                int UserId = Convert.ToInt32(idClaim.Value);
+                var data = this.cartBL.IncreaseBookQuantityintoCart(UserId, BookId);
+                if (idClaim != null)
+                {
+                    _logger.LogInfo($"Quantity Increase Cart Successfully"); // Logger Info          
+                    return this.Ok(new { status = "True", message = "Quantity Increase Cart Successfully", data });
+                }
+                else
+                {
+                    _logger.LogError($"Failed To Quantity Increase Cart"); // Logger Error
+                    return this.BadRequest(new { status = "False", message = "Failed To Quantity Increase To Cart", message1 = "Please login user" });
+                }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(new { message = exception.Message });
+            }
+        }
+
+
+        [HttpPut("Decrease")]
+        public IActionResult DecreaseBookQuantityintoCart(int BookId)
+        {
+            try
+            {
+                var idClaim = HttpContext.User.Claims.FirstOrDefault(UserId => UserId.Type.Equals("UserId", StringComparison.InvariantCultureIgnoreCase));
+                int UserId = Convert.ToInt32(idClaim.Value);
+                var data = this.cartBL.DecreaseBookQuantityintoCart(UserId, BookId);
+                if (idClaim != null)
+                {
+                    _logger.LogInfo($"Quantity Decrease Cart Successfully"); // Logger Info          
+                    return this.Ok(new { status = "True", message = "Quantity Decrease Cart Successfully", data });
+                }
+                else
+                {
+                    _logger.LogError($"Failed To Quantity Decrease Cart"); // Logger Error
+                    return this.BadRequest(new { status = "False", message = "Failed To Quantity Decrease To Cart", message1 = "Please login user" });
+                }
+            }
+            catch (Exception exception)
+            {
+                return BadRequest(new { message = exception.Message });
+            }
+        }
+
         [HttpDelete("{id}")]
         public IActionResult DeleteCartById(int id)
         {

@@ -14,6 +14,9 @@ namespace RepositoryLayer.Services
         // Add connection code
         private readonly IConfiguration _configuration;
         private SqlConnection connection;
+
+        public int OrderQuantity { get; private set; }
+
         public CartRL(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -29,14 +32,51 @@ namespace RepositoryLayer.Services
             try
             {
                 SQLConnection();
-                using (SqlCommand cmd = new SqlCommand("sp_AddBookIntoCart", connection))
+                SqlCommand cmdd = new SqlCommand("select * from Carts where BookId='" + BookId + "'AND UserId ='" + UserId + "' ", connection);
+                                   
+                    connection.Open();
+                    SqlDataReader rd = cmdd.ExecuteReader();
+            
+               
+
+                if (rd.HasRows)
+                {
+                    while (rd.Read())
+                    {
+                        OrderQuantity = Convert.ToInt32(rd["OrderQuantity"]); 
+                    }
+                    connection.Close();
+
+                    using (SqlCommand cmd = new SqlCommand("sp_AddBookIntoCartQauntity", connection))
+                    {
+                       // connection.Open();
+                        //GetListOfBooksInCart(UserId);
+                        //CartBookResponse Quantity = new CartBookResponse();
+                        int addQuantity = OrderQuantity + 1;
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@UserId", UserId);
+                        cmd.Parameters.AddWithValue("@BookId", BookId);
+                        cmd.Parameters.AddWithValue("@OrderQuantity", addQuantity);
+                        connection.Open();
+                        SqlDataReader dataReader = cmd.ExecuteReader();
+                        connection.Close();
+
+                    };
+                    GetListOfBooksInCart(UserId);
+                }
+                else
+                {
+                    connection.Close();
+                    using (SqlCommand cmd = new SqlCommand("sp_AddBookIntoCart", connection))
                 {
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@UserId", UserId);
                     cmd.Parameters.AddWithValue("@BookId", BookId);                 
                     connection.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
+                        connection.Close();
                 };
+                }
                 return false;
             }
             catch (Exception ex)
@@ -44,6 +84,91 @@ namespace RepositoryLayer.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public bool IncreaseBookQuantityintoCart(int UserId, int BookId)
+        {
+            try
+            {
+                SQLConnection();
+                SqlCommand cmdd = new SqlCommand("select * from Carts where BookId='" + BookId + "'AND UserId ='" + UserId + "' ", connection);
+
+                connection.Open();
+                SqlDataReader rd = cmdd.ExecuteReader();
+                if (rd.HasRows)
+                {
+                    while (rd.Read())
+                    {
+                        OrderQuantity = Convert.ToInt32(rd["OrderQuantity"]);
+                    }
+                    connection.Close();
+
+                    using (SqlCommand cmd = new SqlCommand("sp_AddBookIntoCartQauntity", connection))
+                    {
+                        // connection.Open();
+                        //GetListOfBooksInCart(UserId);
+                        //CartBookResponse Quantity = new CartBookResponse();
+                        int addQuantity = OrderQuantity + 1;
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@UserId", UserId);
+                        cmd.Parameters.AddWithValue("@BookId", BookId);
+                        cmd.Parameters.AddWithValue("@OrderQuantity", addQuantity);
+                        connection.Open();
+                        SqlDataReader dataReader = cmd.ExecuteReader();
+                        connection.Close();
+
+                    };
+                    GetListOfBooksInCart(UserId);
+                }               
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        
+        public bool DecreaseBookQuantityintoCart(int UserId, int BookId)
+        {
+            try
+            {
+                SQLConnection();
+                SqlCommand cmdd = new SqlCommand("select * from Carts where BookId='" + BookId + "'AND UserId ='" + UserId + "' ", connection);
+
+                connection.Open();
+                SqlDataReader rd = cmdd.ExecuteReader();
+                if (rd.HasRows)
+                {
+                    while (rd.Read())
+                    {
+                        OrderQuantity = Convert.ToInt32(rd["OrderQuantity"]);
+                    }
+                    connection.Close();
+
+                    using (SqlCommand cmd = new SqlCommand("sp_AddBookIntoCartQauntity", connection))
+                    {
+                        // connection.Open();
+                        //GetListOfBooksInCart(UserId);
+                        //CartBookResponse Quantity = new CartBookResponse();
+                        int addQuantity = OrderQuantity - 1;
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@UserId", UserId);
+                        cmd.Parameters.AddWithValue("@BookId", BookId);
+                        cmd.Parameters.AddWithValue("@OrderQuantity", addQuantity);
+                        connection.Open();
+                        SqlDataReader dataReader = cmd.ExecuteReader();
+                        connection.Close();
+
+                    };
+                    GetListOfBooksInCart(UserId);
+                }               
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
 
         public List<CartBookResponse> GetListOfBooksInCart(int UserId)
         {
@@ -58,7 +183,8 @@ namespace RepositoryLayer.Services
                     cmd.Parameters.AddWithValue("@UserId", UserId);
                     connection.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
-                    bookList = ListBookCartResponseModel(dataReader);
+                    bookList = ListBookCartResponseModel(dataReader); 
+                    connection.Close();
                 };
                 return bookList;
             }
@@ -99,6 +225,7 @@ namespace RepositoryLayer.Services
                     cmd.Parameters.AddWithValue("@TotalPrice", responseData.TotalPrice);
                     connection.Open();
                      cmd.ExecuteReader();
+                    connection.Close();
                 }
                     return bookList;
             }

@@ -51,6 +51,30 @@ namespace BusinessLayer.Services
             {
                 throw new Exception(ex.Message);
             }           
+        } 
+        
+        public bool IncreaseBookQuantityintoCart(int UserId, int BookId)
+        {
+            try
+            {
+                return this.cartRL.IncreaseBookQuantityintoCart(UserId, BookId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }           
+        } 
+        
+        public bool DecreaseBookQuantityintoCart(int UserId, int BookId)
+        {
+            try
+            {
+                return this.cartRL.DecreaseBookQuantityintoCart(UserId, BookId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }           
         }
 
         public bool DeleteCartById(int UserId, int id)

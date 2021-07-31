@@ -8,7 +8,7 @@ CREATE TABLE [dbo].[Carts](
 	[OrderQuantity] [int] DEFAULT 1 NOT NULL
 	PRIMARY KEY (CartId));
 
-	drop table Carts
+	
 	select * from Carts
 		select * from Admin
 			select * from Books

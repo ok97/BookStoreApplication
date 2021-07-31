@@ -1,0 +1,102 @@
+2021-07-31 08:02:46.2085 INFO Logged in Successfully
+2021-07-31 08:38:09.4118 INFO Cart Added Successfully 2
+2021-07-31 08:38:43.6160 INFO Carts Fetched Successfully 2
+2021-07-31 09:02:40.4045 INFO Cart Added Successfully 2
+2021-07-31 09:03:12.8870 INFO Carts Fetched Successfully 2
+2021-07-31 09:19:54.1453 INFO Carts Fetched Successfully 2
+2021-07-31 09:20:14.9762 INFO Cart Added Successfully 2
+2021-07-31 09:20:23.4890 INFO Carts Fetched Successfully 2
+2021-07-31 09:34:59.9578 INFO Get List Of Orders Successfully 2
+2021-07-31 09:44:07.1142 INFO Carts Fetched Successfully 2
+2021-07-31 09:44:29.9858 INFO Cart Added Successfully 2
+2021-07-31 09:44:34.4154 INFO Carts Fetched Successfully 2
+2021-07-31 09:44:56.2144 INFO Cart Added Successfully 2
+2021-07-31 09:45:01.2862 INFO Carts Fetched Successfully 2
+2021-07-31 09:50:22.9045 INFO Carts Fetched Successfully 2
+2021-07-31 09:51:08.9362 INFO Quantity Add Cart Successfully
+2021-07-31 09:51:14.3244 INFO Carts Fetched Successfully 2
+2021-07-31 10:01:47.4117 INFO Carts Fetched Successfully 2
+2021-07-31 10:02:06.1852 INFO Cart Added Successfully 2
+2021-07-31 10:02:11.3839 INFO Carts Fetched Successfully 2
+2021-07-31 10:02:43.6552 INFO Get Orders Successfully 2
+2021-07-31 10:03:17.4924 INFO List of Review Fetched Successfully 2
+2021-07-31 10:03:29.9237 INFO List of Wishlist Fetched Successfully 2
+2021-07-31 10:30:46.4423 INFO Logged in Successfully
+2021-07-31 11:12:49.2094 INFO Carts Fetched Successfully 2
+2021-07-31 11:13:10.0483 INFO Cart Added Successfully 2
+2021-07-31 11:13:14.5043 INFO Carts Fetched Successfully 2
+2021-07-31 11:14:22.3131 INFO Carts Fetched Successfully 2
+2021-07-31 11:14:54.9907 INFO Order Successfully 2
+2021-07-31 11:15:01.9199 INFO Get List Of Orders Successfully 2
+2021-07-31 11:15:22.3559 INFO Get Orders Successfully 2
+2021-07-31 11:15:38.9254 INFO Get List Of Orders Successfully 2
+2021-07-31 11:23:50.5285 INFO Get List Of Orders Successfully 2
+2021-07-31 19:39:00.1297 INFO Logged in Successfully
+2021-07-31 19:39:45.2475 INFO Carts Fetched Successfully 2
+2021-07-31 19:40:58.3650 INFO Carts Fetched Successfully 2
+2021-07-31 19:41:52.7987 INFO Carts Fetched Successfully 2
+2021-07-31 19:45:22.6621 INFO Logged in Successfully
+2021-07-31 19:45:59.8337 INFO Quantity Add Cart Successfully
+2021-07-31 19:46:15.1829 INFO Carts Fetched Successfully 2
+2021-07-31 19:47:49.4865 INFO Get List Of Orders Successfully 2
+2021-07-31 19:50:42.6048 INFO Carts Fetched Successfully 2
+2021-07-31 19:51:34.7346 INFO Carts Fetched Successfully 2
+2021-07-31 19:51:44.2423 INFO Quantity Add Cart Successfully
+2021-07-31 19:51:47.4502 INFO Carts Fetched Successfully 2
+2021-07-31 19:54:21.8956 INFO Login user
+2021-07-31 20:01:36.7856 INFO Logged in Successfully
+2021-07-31 20:01:56.6213 INFO Carts Fetched Successfully 2
+2021-07-31 20:03:30.9116 INFO Quantity Add Cart Successfully
+2021-07-31 20:03:35.4259 INFO Carts Fetched Successfully 2
+2021-07-31 20:04:31.8823 INFO Get List Of Orders Successfully 2
+2021-07-31 20:04:55.4299 INFO  Order Delete Successfully 2
+2021-07-31 20:05:05.8290 INFO Get List Of Orders Successfully 2
+2021-07-31 20:05:11.8227 INFO Card Delete Successfully
+2021-07-31 20:05:36.7214 INFO Carts Fetched Successfully 2
+2021-07-31 20:06:00.3090 INFO Quantity Add Cart Successfully
+2021-07-31 20:06:08.1834 INFO Carts Fetched Successfully 2
+2021-07-31 20:06:56.2604 INFO Quantity Add Cart Successfully
+2021-07-31 20:07:09.3518 INFO Carts Fetched Successfully 2
+2021-07-31 20:07:30.9999 INFO Get List Of Orders Successfully 2
+2021-07-31 20:07:52.7716 INFO  Order Delete Successfully 2
+2021-07-31 20:07:55.7631 INFO Get List Of Orders Successfully 2
+2021-07-31 20:08:11.5283 INFO Card Delete Successfully
+2021-07-31 20:08:20.5452 INFO Get List Of Orders Successfully 2
+2021-07-31 20:08:34.2704 INFO  Order Delete Successfully 2
+2021-07-31 20:08:36.0438 INFO Get List Of Orders Successfully 2
+2021-07-31 20:08:46.8514 INFO Carts Fetched Successfully 2
+2021-07-31 20:10:37.3016 INFO Logged in Successfully
+2021-07-31 20:13:24.7230 INFO Cart Added Successfully 2
+2021-07-31 20:13:32.8668 INFO Carts Fetched Successfully 2
+2021-07-31 20:14:00.4587 INFO Quantity Add Cart Successfully
+2021-07-31 20:14:05.5127 INFO Carts Fetched Successfully 2
+2021-07-31 20:14:28.5945 INFO Cart Added Successfully 2
+2021-07-31 20:16:31.8331 INFO Carts Fetched Successfully 2
+2021-07-31 20:16:46.2120 INFO Quantity Add Cart Successfully
+2021-07-31 20:16:49.8004 INFO Carts Fetched Successfully 2
+2021-07-31 20:17:07.1321 INFO Cart Added Successfully 2
+2021-07-31 20:17:12.6803 INFO Carts Fetched Successfully 2
+2021-07-31 20:20:40.7586 INFO Cart Added Successfully 2
+2021-07-31 20:20:45.1088 INFO Carts Fetched Successfully 2
+2021-07-31 20:21:07.5147 INFO Cart Added Successfully 2
+2021-07-31 20:21:26.7925 INFO Quantity Add Cart Successfully
+2021-07-31 20:21:31.2605 INFO Carts Fetched Successfully 2
+2021-07-31 20:42:34.2873 INFO Logged in Successfully
+2021-07-31 20:43:22.1004 INFO Quantity Add Cart Successfully
+2021-07-31 20:43:38.7507 INFO Quantity Add Cart Successfully
+2021-07-31 20:44:01.0511 INFO Quantity Add Cart Successfully
+2021-07-31 20:44:28.3064 INFO Quantity Add Cart Successfully
+2021-07-31 20:44:39.5597 INFO Quantity Add Cart Successfully
+2021-07-31 20:47:49.4112 INFO Logged in Successfully
+2021-07-31 20:48:28.9702 INFO Quantity Decrease Cart Successfully
+2021-07-31 20:48:51.9964 INFO Quantity Decrease Cart Successfully
+2021-07-31 20:49:29.2964 INFO Quantity Increase Cart Successfully
+2021-07-31 20:50:49.5227 INFO Logged in Successfully
+2021-07-31 20:51:24.6826 INFO Quantity Decrease Cart Successfully
+2021-07-31 20:52:00.3739 INFO Quantity Decrease Cart Successfully
+2021-07-31 20:52:09.3084 INFO Quantity Decrease Cart Successfully
+2021-07-31 20:52:10.4492 INFO Quantity Decrease Cart Successfully
+2021-07-31 20:52:11.1370 INFO Quantity Decrease Cart Successfully
+2021-07-31 20:52:11.6974 INFO Quantity Decrease Cart Successfully
+2021-07-31 20:52:14.0985 INFO Quantity Decrease Cart Successfully
+2021-07-31 20:52:21.5800 INFO Quantity Decrease Cart Successfully
