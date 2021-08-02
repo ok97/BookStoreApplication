@@ -144,7 +144,7 @@ namespace RepositoryLayer.Services
                     }
                     connection.Close();
 
-                    using (SqlCommand cmd = new SqlCommand("sp_AddBookIntoCartQauntity", connection))
+                    using (SqlCommand cmd = new SqlCommand("sp_removeBookIntoCartQauntity", connection))
                     {
                         // connection.Open();
                         //GetListOfBooksInCart(UserId);

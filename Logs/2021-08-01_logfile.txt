@@ -1,0 +1,24 @@
+2021-08-01 20:28:57.3493 INFO Logged in Successfully
+2021-08-01 20:29:47.1196 INFO Quantity Increase Cart Successfully
+2021-08-01 20:30:04.0923 INFO Quantity Increase Cart Successfully
+2021-08-01 20:32:18.7246 INFO Logged in Successfully
+2021-08-01 20:32:56.7604 INFO Quantity Decrease Cart Successfully
+2021-08-01 20:33:11.9196 INFO Quantity Decrease Cart Successfully
+2021-08-01 20:35:42.0229 INFO Quantity Increase Cart Successfully
+2021-08-01 20:36:00.2819 INFO Quantity Increase Cart Successfully
+2021-08-01 20:36:53.5116 INFO Quantity Decrease Cart Successfully
+2021-08-01 21:04:19.9426 INFO Logged in Successfully
+2021-08-01 21:05:51.0555 INFO Quantity Increase Cart Successfully
+2021-08-01 21:06:05.2876 INFO Quantity Increase Cart Successfully
+2021-08-01 21:06:14.2429 INFO Quantity Increase Cart Successfully
+2021-08-01 21:06:26.2127 INFO Quantity Increase Cart Successfully
+2021-08-01 21:06:32.9764 INFO Quantity Increase Cart Successfully
+2021-08-01 21:06:51.8049 INFO Quantity Decrease Cart Successfully
+2021-08-01 21:07:05.3074 INFO Quantity Decrease Cart Successfully
+2021-08-01 21:07:06.0625 INFO Quantity Decrease Cart Successfully
+2021-08-01 21:07:06.2133 INFO Quantity Decrease Cart Successfully
+2021-08-01 21:07:06.3585 INFO Quantity Decrease Cart Successfully
+2021-08-01 21:07:06.5106 INFO Quantity Decrease Cart Successfully
+2021-08-01 21:07:06.6342 INFO Quantity Decrease Cart Successfully
+2021-08-01 21:07:21.7114 INFO Quantity Decrease Cart Successfully
+2021-08-01 21:07:32.2490 INFO Quantity Decrease Cart Successfully
